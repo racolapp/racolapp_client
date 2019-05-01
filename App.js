@@ -1,15 +1,17 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {TouchableOpacity, Platform, StyleSheet, Text, View} from 'react-native';
 import GoogleMaps from './src/components/GoogleMaps'
 
-// // (UTILE ?????) ANDROID PERMISSIONS FOR API >= 23
+// // // (QUestion: UTILE ?????) ANDROID PERMISSIONS FOR API >= 23
 // import {requestLocationPermission} from './src/utils/PermissionsAndroid';
 
 export default class App extends Component {
 
+  // // Si AndroidPermissions pour API>=23 nécessaire!
   // async componentWillMount(){
   //   await requestLocationPermission();
   // }
+
 
   render(){
     return (

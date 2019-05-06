@@ -1,10 +1,3 @@
-// TODO (Google Places):
-// 1/ delete a textinput
-// 2/ get long/lat from selected result
-// 3/ get long/lat from current position
-// 4/ show global planet if gps unauthorized
-// 5/ API KEY => environment variable
-
 import React, { Component } from "react";
 import {
   Platform,

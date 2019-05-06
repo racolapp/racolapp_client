@@ -1,15 +1,12 @@
 import React, {Component} from 'react';
-import GoogleMaps from './src/components/GoogleMaps'
+import HomeScreen from './src/screens/Home';
+import { createStackNavigator, createAppContainer } from "react-navigation";
 
-export default class App extends Component {
 
-
-  render(){
-    return (
-      <>
-        {/* ATTENTION: le component GoogleMaps n'affichera rien si wrappé dans autre chose que des chevrons vides */}
-        <GoogleMaps/>
-      </>
-    )
+const AppNavigator = createStackNavigator({
+  Home: {
+    screen: HomeScreen
   }
-}
+ });
+
+ export default createAppContainer(AppNavigator);

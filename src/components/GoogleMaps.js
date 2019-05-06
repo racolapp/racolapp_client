@@ -20,6 +20,7 @@ import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import axios from "axios";
 import { requestLocationPermission } from "../utils/PermissionsAndroid";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import Config from 'react-native-config'
 
 // PARAMS GOOGLE PLACES AUTOCOMPLETe
 // const homePlace = {description: 'Home', geometry: { location: { lat: 48.8152937, lng: 2.4597668 } }};
@@ -29,19 +30,16 @@ export default class GoogleMaps extends Component {
   constructor(props) {
     super(props);
 
-    this.apiKey = "AIzaSyCZQlG_BBd6QXgiKR9O3cRGP_VbfG3kopw";
-
     this.state = {
       location: {
         latitude: 48.8534,
         longitude: 2.3488,
-        latitudeDelta: 10,
-        longitudeDelta: 10,
+        latitudeDelta: 100,
+        longitudeDelta: 100,
         error: null
       },
       googlePlaces: {
         displayResultGooglePlacesSearch: "false"
-        // textInput: ""
       }
     };
   }
@@ -116,7 +114,7 @@ export default class GoogleMaps extends Component {
         // getDefaultValue={() => this.state.textInput}
         query={{
           // available options: https://developers.google.com/places/web-service/autocomplete
-          key: this.apiKey,
+          key: Config.GOOGLE_MAPS_API_KEY,
           language: "fr", // (TODO: vérifier) language of the results
           types: "(cities)" // default: 'geocode'
         }}

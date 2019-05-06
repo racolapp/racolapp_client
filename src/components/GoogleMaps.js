@@ -29,14 +29,14 @@ export default class GoogleMaps extends Component {
   constructor(props) {
     super(props);
 
-    this.apiKey = "AIzaSyDFgAr4CWPWN9jSz7Xb5AsqVn-qn6AwnqQ";
+    this.apiKey = "AIzaSyCZQlG_BBd6QXgiKR9O3cRGP_VbfG3kopw";
 
     this.state = {
       location: {
         latitude: 48.8534,
         longitude: 2.3488,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
+        latitudeDelta: 10,
+        longitudeDelta: 10,
         error: null
       },
       googlePlaces: {
@@ -47,8 +47,10 @@ export default class GoogleMaps extends Component {
   }
 
   async componentWillMount() {
-    await requestLocationPermission();
-    this._setLocation();
+    if (Platform.OS == "android") {
+      await requestLocationPermission();
+      this._setLocation();
+    }
   }
 
   _setLocation = () => {
@@ -70,7 +72,7 @@ export default class GoogleMaps extends Component {
           error: error.message
         });
       },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+      { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 }
     );
   };
 
@@ -86,6 +88,7 @@ export default class GoogleMaps extends Component {
 
   _renderGooglePlacesAutocomplete = () => {
     const { displayResultGooglePlacesSearch } = this.state.googlePlaces;
+    const { latitudeDelta, longitudeDelta } = this.state.location;
     return (
       <GooglePlacesAutocomplete
         placeholder="Search"
@@ -95,15 +98,19 @@ export default class GoogleMaps extends Component {
         keyboardAppearance={"light"} // Can be left out for default keyboardAppearance https://facebook.github.io/react-native/docs/textinput.html#keyboardappearance
         listViewDisplayed={displayResultGooglePlacesSearch} // true/false/undefined
         fetchDetails={true}
+        enablePoweredByContainer={false}
         renderDescription={row =>
           row.description || row.formatted_address || row.name
         } // (TODO: vérifier) custom description render
         onPress={(data, details = null) => {
-          // 'details' is provided when fetchDetails = true
-          console.log(data, details);
-          // this.setState({
-          //   displayResultGooglePlacesSearch: "auto"
-          // });
+          this.setState({
+            location:{
+              latitude: details.geometry.location.lat,
+              longitude: details.geometry.location.lng,
+              latitudeDelta,
+              longitudeDelta
+            }
+          });
         }}
         getDefaultValue={() => ""}
         // getDefaultValue={() => this.state.textInput}
@@ -127,31 +134,30 @@ export default class GoogleMaps extends Component {
             borderRadius: 10
           }
         }}
-        currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
-        currentLocationLabel="Current location"
-        nearbyPlacesAPI="GooglePlacesSearch" // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
-        GoogleReverseGeocodingQuery={
-          {
-            // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
-          }
-        }
-        GooglePlacesSearchQuery={{
-          // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search
-          rankby: "distance",
-          type: "cafe"
-        }}
-        GooglePlacesDetailsQuery={{
-          // available options for GooglePlacesDetails API : https://developers.google.com/places/web-service/details
-          fields: "formatted_address"
-        }}
-        filterReverseGeocodingByTypes={[
-          "locality",
-          "administrative_area_level_3"
-        ]} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities
-        // predefinedPlaces={[homePlace, workPlace]}
+        currentLocation={false} // Will add a 'Current location' button at the top of the predefined places list
+        // // currentLocationLabel="Current location"
+        // nearbyPlacesAPI="GooglePlacesSearch" // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
+        // GoogleReverseGeocodingQuery={
+        //   {
+        //     // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
+        //   }
+        // }
+        // GooglePlacesSearchQuery={{
+        //   // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search
+        //   rankby: "distance",
+        //   type: "cafe"
+        // }}
+        // GooglePlacesDetailsQuery={{
+        //   // available options for GooglePlacesDetails API : https://developers.google.com/places/web-service/details
+        //   fields: "formatted_address"
+        // }}
+        // filterReverseGeocodingByTypes={[
+        //   "locality",
+        //   "administrative_area_level_3"
+        // ]} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities
+        // // predefinedPlaces={[homePlace, workPlace]}
 
         debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
-        // TODO: pas le comportement attendu : ferme page résultats mais pas le clavier ni le curseur
         renderLeftButton={() => (
           <TouchableOpacity
             style={styles.button}
@@ -167,16 +173,6 @@ export default class GoogleMaps extends Component {
             <Text> Left Button or Left Icon </Text>
           </TouchableOpacity>
         )}
-        // renderRightButton={() =>
-        //   <TouchableOpacity style={styles.button}
-        //     onPress={() => {
-        //       this.setState({textInput: ""});
-
-        //     }}
-        //   >
-        //   <Text> X </Text>
-        //   </TouchableOpacity>
-        // }
       />
     );
   };
@@ -194,6 +190,7 @@ export default class GoogleMaps extends Component {
         {this._renderGooglePlacesAutocomplete()}
 
         {/* TODO: hide when google places search is visible */}
+
         <View style={styles.bottomContainer}>
           <TouchableOpacity onPress={this._setLocation} style={styles.button}>
             <Text style={styles.textWhite}> MOVE TO LOCATION </Text>

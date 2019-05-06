@@ -6,12 +6,27 @@ import SignUpScreen from "./src/screens/SignUp";
 import EventsPostedScreen from "./src/screens/EventsPosted";
 import EventsSubscriptedScreen from "./src/screens/EventsSubscripted";
 import AddScreen from "./src/screens/Add";
-import { Text, View } from "react-native";
+import { Text, View, Image } from "react-native";
 import {
   createBottomTabNavigator,
   createStackNavigator,
   createAppContainer
 } from "react-navigation";
+
+const headerStyle = {
+  headerStyle: {
+    backgroundColor: "#F8F8F8"
+  },
+  headerTintColor: "#000000",
+  headerTitleStyle: {
+    fontWeight: "bold",
+    flex: 1,
+    textAlign: "center"
+  }
+};
+
+// TODO: répercuter partout (utiliser stylesheet?)
+const colorIconsTabBar = "#2699FB";
 
 const resultsStack = createStackNavigator(
   {
@@ -19,7 +34,41 @@ const resultsStack = createStackNavigator(
     Map: MapScreen
   },
   {
-    initialRouteName: "Home"
+    initialRouteName: "Home",
+    defaultNavigationOptions: headerStyle
+  }
+);
+
+const eventsPostedSingleStack = createStackNavigator(
+  {
+    EventsPosted: {
+      screen: EventsPostedScreen
+    }
+  },
+  {
+    defaultNavigationOptions: headerStyle
+  }
+);
+
+const addSingleStack = createStackNavigator(
+  {
+    Add: {
+      screen: AddScreen
+    }
+  },
+  {
+    defaultNavigationOptions: headerStyle
+  }
+);
+
+const eventsSubscriptedSingleStack = createStackNavigator(
+  {
+    EventsSubscripted: {
+      screen: EventsSubscriptedScreen
+    }
+  },
+  {
+    defaultNavigationOptions: headerStyle
   }
 );
 
@@ -29,16 +78,75 @@ const authenticationStack = createStackNavigator(
     SignUp: SignUpScreen
   },
   {
-    initialRouteName: "SignIn"
+    initialRouteName: "SignIn",
+    defaultNavigationOptions: headerStyle
   }
 );
 
 export default createAppContainer(
-  createBottomTabNavigator({
-    Home: resultsStack,
-    EventsPosted: EventsPostedScreen,
-    Add: AddScreen,
-    EventsSubscripted: EventsSubscriptedScreen,
-    Authentication: authenticationStack
-  })
+  createBottomTabNavigator(
+    {
+      Home: {
+        screen: resultsStack,
+        navigationOptions: {
+          tabBarIcon: (focused, tintColor) => (
+            <Image
+              style={{ width: 30, height: 30 }}
+              source={require("./assets/img/tabBar/search.png")}
+            />
+          )
+        }
+      },
+      EventsPosted: {
+        screen: eventsPostedSingleStack,
+        navigationOptions: {
+          tabBarIcon: (focused, tintColor) => (
+            <Image
+              style={{ width: 30, height: 30 }}
+              source={require("./assets/img/tabBar/thumbs.png")}
+            />
+          )
+        }
+      },
+      Add: {
+        screen: addSingleStack,
+        navigationOptions: {
+          tabBarIcon: (focused, tintColor) => (
+            <Image
+              style={{ width: 30, height: 30 }}
+              source={require("./assets/img/tabBar/plus.png")}
+            />
+          )
+        }
+      },
+      EventsSubscripted: {
+        screen: eventsSubscriptedSingleStack,
+        navigationOptions: {
+          tabBarIcon: (focused, tintColor) => (
+            <Image
+              style={{ width: 30, height: 30, tintColor: "red" }}
+              source={require("./assets/img/tabBar/calendar.png")}
+            />
+          )
+        }
+      },
+      Authentication: {
+        screen: authenticationStack,
+        navigationOptions: {
+          tabBarIcon: (focused, tintColor) => (
+            <Image
+              style={{ width: 30, height: 30 }}
+              source={require("./assets/img/tabBar/user.png")}
+            />
+          )
+        }
+      },
+    },
+    {
+      tabBarOptions: {
+        showIcon: true,
+        showLabel: false
+      }
+    }
+  )
 );

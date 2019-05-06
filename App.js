@@ -1,37 +1,44 @@
-import React, {Component} from 'react';
-import HomeScreen from './src/screens/Home';
-import { Text, View } from 'react-native';
-import { createBottomTabNavigator, createStackNavigator, createAppContainer } from "react-navigation";
+import React, { Component } from "react";
+import HomeScreen from "./src/screens/Home";
+import MapScreen from "./src/screens/Map";
+import SignInScreen from "./src/screens/SignIn";
+import SignUpScreen from "./src/screens/SignUp";
+import EventsPostedScreen from "./src/screens/EventsPosted";
+import EventsSubscriptedScreen from "./src/screens/EventsSubscripted";
+import AddScreen from "./src/screens/Add";
+import { Text, View } from "react-native";
+import {
+  createBottomTabNavigator,
+  createStackNavigator,
+  createAppContainer
+} from "react-navigation";
 
-
-const AppNavigator = createStackNavigator({
-  Home: {
-    screen: HomeScreen
+const resultsStack = createStackNavigator(
+  {
+    Home: HomeScreen,
+    Map: MapScreen
+  },
+  {
+    initialRouteName: "Home"
   }
- });
+);
 
-//  export default createAppContainer(AppNavigator);
+const authenticationStack = createStackNavigator(
+  {
+    SignIn: SignInScreen,
+    SignUp: SignUpScreen
+  },
+  {
+    initialRouteName: "SignIn"
+  }
+);
 
-
-
-// class HomeScreen extends React.Component {
-//   render() {
-//     return (
-//       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-//         <Text>Home!</Text>
-//       </View>
-//     );
-//   }
-// }
-
-
-
-const TabNavigator = createBottomTabNavigator({
-  Home: HomeScreen,
-  EventsPosted: EventsPostedScreen,
-  Add: AddScreen,
-  EventsSubscripted: EventsSubscriptedScreen,
-  Profile: ProfileScreen
-});
-
-export default createAppContainer(TabNavigator);
+export default createAppContainer(
+  createBottomTabNavigator({
+    Home: resultsStack,
+    EventsPosted: EventsPostedScreen,
+    Add: AddScreen,
+    EventsSubscripted: EventsSubscriptedScreen,
+    Authentication: authenticationStack
+  })
+);

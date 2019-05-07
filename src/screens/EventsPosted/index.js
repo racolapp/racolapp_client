@@ -3,7 +3,7 @@ import { Text, View  } from 'react-native';
 
 export default class EventsPostedScreen extends Component {
   static navigationOptions = {
-    title: 'Mes publications',
+    title: 'MES PUBLICATIONS',
   };
 
     render() {

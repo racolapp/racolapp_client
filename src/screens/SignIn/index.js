@@ -3,7 +3,7 @@ import { Text, View, TouchableOpacity } from 'react-native';
 
 export default class SignInScreen extends Component {
   static navigationOptions = {
-    title: 'Connexion',
+    title: 'CONNEXION',
   };
 
     render() {

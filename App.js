@@ -5,6 +5,7 @@ import SignInScreen from "./src/screens/SignIn";
 import SignUpScreen from "./src/screens/SignUp";
 import EventsPostedScreen from "./src/screens/EventsPosted";
 import EventsSubscriptedScreen from "./src/screens/EventsSubscripted";
+import SingleEventDetailsScreen from "./src/screens/SingleEventDetails";
 import AddScreen from "./src/screens/Add";
 import { Image, } from "react-native";
 import {
@@ -12,6 +13,7 @@ import {
   createStackNavigator,
   createAppContainer
 } from "react-navigation";
+import {styleMainColor, styleOnMainColor} from './src/utils/styles';
 
 // STYLE HEADER NAVIGATION
 const headerStyle = {
@@ -29,15 +31,16 @@ const headerStyle = {
 // STYLE BOTTOM NAVIGATION
 const sizeHomeButtonTabBar = 40;
 const sizeNotHomeButtonTabBar = 25;
-const colorIconsTabBar = "#2699FB";
-const colorIconsTabBarSelected = "#1D6098";
+const colorIconsTabBar = styleMainColor;
+const colorIconsTabBarSelected = styleOnMainColor;
 
 
 // NAVIGATION
 const resultsStack = createStackNavigator(
   {
     Home: HomeScreen,
-    Map: MapScreen
+    Map: MapScreen,
+    SingleEventDetails: SingleEventDetailsScreen
   },
   {
     initialRouteName: "Home",

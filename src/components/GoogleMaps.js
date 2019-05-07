@@ -12,7 +12,6 @@ export default class GoogleMaps extends Component {
 
   render() {
     return (
-      <View style={styles.overallViewContainer}>
         <MapView
           style={styles.mapView}
           provider={PROVIDER_GOOGLE}
@@ -20,22 +19,14 @@ export default class GoogleMaps extends Component {
           showsMyLocationButton={false}
           showsUserLocation={true}
         />
-      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  overallViewContainer: {
-    paddingTop: "10%",
-    position: "relative",
-    height: "100%",
-    width: "100%",
-    alignItems: "center"
-  },
   mapView: {
-    paddingTop: "10%",
-    position: "relative",
+    position: "absolute",
+    // paddingTop: "10%",
     height: "100%",
     width: "100%"
   },

@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Platform } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity, Platform, Image } from 'react-native'
 import GoogleMaps from '../../components/GoogleMaps';
 import GoogleAutocomplete from '../../components/GoogleAutocomplete'
 import { requestLocationPermission } from "../../utils/PermissionsAndroid";
-
 
 export default class MapScreen extends Component {
   constructor(props) {
@@ -30,8 +29,8 @@ export default class MapScreen extends Component {
   async componentWillMount() {
     if (Platform.OS == "android") {
       await requestLocationPermission();
-      this._setLocation();
     }
+    this._setLocation();
   }
 
   _setLocation = () => {
@@ -70,38 +69,31 @@ export default class MapScreen extends Component {
 
   render() {
     return (
-      <>
-        <GoogleAutocomplete googlePlaces={this.state.googlePlaces} location={this.state.location} />
+      <View style={styles.overallViewContainer}>
         <GoogleMaps region={this._setRegion()} />
-        {/* TODO: Hide when GoogleAutocomplete search list is active */}
-        <View style={styles.bottomContainer}>
-          <TouchableOpacity onPress={this._setLocation} style={styles.button}>
-            <Text style={styles.textWhite}> MOVE TO LOCATION </Text>
-          </TouchableOpacity>
+        <View style={{ height: "10%" }}>
+          <View style={{ flex: 1, flexDirection: "row", alignItems: "center", marginLeft: 15 }}>
+            <GoogleAutocomplete googlePlaces={this.state.googlePlaces} location={this.state.location} />
+            <View style={{ marginRight: 15}}>
+              <TouchableOpacity onPress={this._setLocation} >
+                <Image
+                  style={{ width: 25, height: 25 }}
+                  source={require("../../../assets/img/googlePlaceSearch/gpsIndicator.png")}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
-      </>
+      </View>
     )
   }
 }
-
 const styles = StyleSheet.create({
-  bottomContainer: {
+  overallViewContainer: {
     position: "absolute",
+    height: "100%",
     width: "100%",
-    alignItems: "center",
-    bottom: 25
+    flex: 1,
+    // alignItems: "center"
   },
-  button: {
-    alignItems: "center",
-    backgroundColor: "#ff6600",
-    borderRadius: 10,
-    height: 40,
-    padding: 10,
-    shadowOpacity: 0.75,
-    shadowRadius: 1,
-    shadowColor: "gray"
-  },
-  textWhite: {
-    color: "white"
-  }
 });

@@ -6,13 +6,14 @@ import SignUpScreen from "./src/screens/SignUp";
 import EventsPostedScreen from "./src/screens/EventsPosted";
 import EventsSubscriptedScreen from "./src/screens/EventsSubscripted";
 import AddScreen from "./src/screens/Add";
-import { Text, View, Image } from "react-native";
+import { Image, } from "react-native";
 import {
   createBottomTabNavigator,
   createStackNavigator,
   createAppContainer
 } from "react-navigation";
 
+// STYLE HEADER NAVIGATION
 const headerStyle = {
   headerStyle: {
     backgroundColor: "#F8F8F8"
@@ -25,9 +26,14 @@ const headerStyle = {
   }
 };
 
-// TODO: répercuter partout (utiliser stylesheet?)
+// STYLE BOTTOM NAVIGATION
+const sizeHomeButtonTabBar = 40;
+const sizeNotHomeButtonTabBar = 25;
 const colorIconsTabBar = "#2699FB";
+const colorIconsTabBarSelected = "#1D6098";
 
+
+// NAVIGATION
 const resultsStack = createStackNavigator(
   {
     Home: HomeScreen,
@@ -83,18 +89,22 @@ const authenticationStack = createStackNavigator(
   }
 );
 
+_handleColorIconTabBar = (focused) => {
+  return color = focused ? colorIconsTabBarSelected : colorIconsTabBar;
+}
+
 export default createAppContainer(
   createBottomTabNavigator(
     {
-      Home: {
-        screen: resultsStack,
+      EventsSubscripted: {
+        screen: eventsSubscriptedSingleStack,
         navigationOptions: {
-          tabBarIcon: (focused, tintColor) => (
-            <Image
-              style={{ width: 30, height: 30 }}
-              source={require("./assets/img/tabBar/search.png")}
-            />
-          )
+          tabBarIcon: (focused, tintColor) => {
+            return (<Image
+              style={{ width: 25, height: 25, tintColor: _handleColorIconTabBar(focused.focused) }}
+              source={require("./assets/img/tabBar/calendar.png")}
+            />)
+          }
         }
       },
       EventsPosted: {
@@ -102,8 +112,19 @@ export default createAppContainer(
         navigationOptions: {
           tabBarIcon: (focused, tintColor) => (
             <Image
-              style={{ width: 30, height: 30 }}
-              source={require("./assets/img/tabBar/thumbs.png")}
+              style={{ width: sizeNotHomeButtonTabBar, height: sizeNotHomeButtonTabBar, tintColor: _handleColorIconTabBar(focused.focused) }}
+              source={require("./assets/img/tabBar/invite.png")}
+            />
+          )
+        }
+      },
+      Home: {
+        screen: resultsStack,
+        navigationOptions: {
+          tabBarIcon: (focused, tintColor) => (
+            <Image
+              style={{ width: sizeHomeButtonTabBar, height: sizeHomeButtonTabBar, tintColor: _handleColorIconTabBar(focused.focused) }}
+              source={require("./assets/img/tabBar/search.png")}
             />
           )
         }
@@ -113,19 +134,8 @@ export default createAppContainer(
         navigationOptions: {
           tabBarIcon: (focused, tintColor) => (
             <Image
-              style={{ width: 30, height: 30 }}
+              style={{ width: sizeNotHomeButtonTabBar, height: sizeNotHomeButtonTabBar, tintColor: _handleColorIconTabBar(focused.focused) }}
               source={require("./assets/img/tabBar/plus.png")}
-            />
-          )
-        }
-      },
-      EventsSubscripted: {
-        screen: eventsSubscriptedSingleStack,
-        navigationOptions: {
-          tabBarIcon: (focused, tintColor) => (
-            <Image
-              style={{ width: 30, height: 30, tintColor: "red" }}
-              source={require("./assets/img/tabBar/calendar.png")}
             />
           )
         }
@@ -135,7 +145,7 @@ export default createAppContainer(
         navigationOptions: {
           tabBarIcon: (focused, tintColor) => (
             <Image
-              style={{ width: 30, height: 30 }}
+              style={{ width: sizeNotHomeButtonTabBar, height: sizeNotHomeButtonTabBar, tintColor: _handleColorIconTabBar(focused.focused) }}
               source={require("./assets/img/tabBar/user.png")}
             />
           )
@@ -143,10 +153,11 @@ export default createAppContainer(
       },
     },
     {
+      initialRouteName: "Home",
       tabBarOptions: {
         showIcon: true,
         showLabel: false
       }
-    }
+    },
   )
 );

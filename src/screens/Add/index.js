@@ -3,7 +3,7 @@ import { Text, View  } from 'react-native';
 
 export default class AddScreen extends Component {
   static navigationOptions = {
-    title: 'Nouvel évènement',
+    title: 'NOUVEL EVENEMENT',
   };
 
     render() {

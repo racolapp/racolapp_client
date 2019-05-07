@@ -4,7 +4,7 @@ import { Text, View, TouchableOpacity } from 'react-native';
 export default class HomeScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     return ({
-      title: 'A proximité',
+      title: 'A PROXIMITE',
       headerRight: (
         <TouchableOpacity
           title="Go to Map View"

@@ -7,35 +7,20 @@ import EventsPostedScreen from "./src/screens/EventsPosted";
 import EventsSubscriptedScreen from "./src/screens/EventsSubscripted";
 import SingleEventDetailsScreen from "./src/screens/SingleEventDetails";
 import AddScreen from "./src/screens/Add";
-import { Image, } from "react-native";
+import { Image } from "react-native";
 import {
   createBottomTabNavigator,
   createStackNavigator,
   createAppContainer
 } from "react-navigation";
-import {styleMainColor, styleOnMainColor} from './src/utils/styles';
+import {
+  styleMainColor,
+  styleOnMainColor,
+  styleNavigationHeaderStyle,
+  sizeHomeButtonTabBar,
+  sizeNotHomeButtonTabBar
+} from "./src/utils/styles";
 
-// STYLE HEADER NAVIGATION
-const headerStyle = {
-  headerStyle: {
-    backgroundColor: "#F8F8F8"
-  },
-  headerTintColor: "#000000",
-  headerTitleStyle: {
-    fontWeight: "bold",
-    flex: 1,
-    textAlign: "center"
-  }
-};
-
-// STYLE BOTTOM NAVIGATION
-const sizeHomeButtonTabBar = 40;
-const sizeNotHomeButtonTabBar = 25;
-const colorIconsTabBar = styleMainColor;
-const colorIconsTabBarSelected = styleOnMainColor;
-
-
-// NAVIGATION
 const resultsStack = createStackNavigator(
   {
     Home: HomeScreen,
@@ -44,7 +29,7 @@ const resultsStack = createStackNavigator(
   },
   {
     initialRouteName: "Home",
-    defaultNavigationOptions: headerStyle
+    defaultNavigationOptions: styleNavigationHeaderStyle
   }
 );
 
@@ -55,7 +40,7 @@ const eventsPostedSingleStack = createStackNavigator(
     }
   },
   {
-    defaultNavigationOptions: headerStyle
+    defaultNavigationOptions: styleNavigationHeaderStyle
   }
 );
 
@@ -66,7 +51,7 @@ const addSingleStack = createStackNavigator(
     }
   },
   {
-    defaultNavigationOptions: headerStyle
+    defaultNavigationOptions: styleNavigationHeaderStyle
   }
 );
 
@@ -77,7 +62,7 @@ const eventsSubscriptedSingleStack = createStackNavigator(
     }
   },
   {
-    defaultNavigationOptions: headerStyle
+    defaultNavigationOptions: styleNavigationHeaderStyle
   }
 );
 
@@ -88,13 +73,13 @@ const authenticationStack = createStackNavigator(
   },
   {
     initialRouteName: "SignIn",
-    defaultNavigationOptions: headerStyle
+    defaultNavigationOptions: styleNavigationHeaderStyle
   }
 );
 
-_handleColorIconTabBar = (focused) => {
-  return color = focused ? colorIconsTabBarSelected : colorIconsTabBar;
-}
+_handleColorIconTabBar = focused => {
+  return (color = focused ? styleOnMainColor : styleMainColor);
+};
 
 export default createAppContainer(
   createBottomTabNavigator(
@@ -102,20 +87,28 @@ export default createAppContainer(
       EventsSubscripted: {
         screen: eventsSubscriptedSingleStack,
         navigationOptions: {
-          tabBarIcon: (focused, tintColor) => {
-            return (<Image
-              style={{ width: 25, height: 25, tintColor: _handleColorIconTabBar(focused.focused) }}
+          tabBarIcon: focused => (
+            <Image
+              style={{
+                width: sizeNotHomeButtonTabBar,
+                height: sizeNotHomeButtonTabBar,
+                tintColor: _handleColorIconTabBar(focused.focused)
+              }}
               source={require("./assets/img/tabBar/calendar.png")}
-            />)
-          }
+            />
+          )
         }
       },
       EventsPosted: {
         screen: eventsPostedSingleStack,
         navigationOptions: {
-          tabBarIcon: (focused, tintColor) => (
+          tabBarIcon: focused => (
             <Image
-              style={{ width: sizeNotHomeButtonTabBar, height: sizeNotHomeButtonTabBar, tintColor: _handleColorIconTabBar(focused.focused) }}
+              style={{
+                width: sizeNotHomeButtonTabBar,
+                height: sizeNotHomeButtonTabBar,
+                tintColor: _handleColorIconTabBar(focused.focused)
+              }}
               source={require("./assets/img/tabBar/invite.png")}
             />
           )
@@ -126,7 +119,11 @@ export default createAppContainer(
         navigationOptions: {
           tabBarIcon: (focused, tintColor) => (
             <Image
-              style={{ width: sizeHomeButtonTabBar, height: sizeHomeButtonTabBar, tintColor: _handleColorIconTabBar(focused.focused) }}
+              style={{
+                width: sizeHomeButtonTabBar,
+                height: sizeHomeButtonTabBar,
+                tintColor: _handleColorIconTabBar(focused.focused)
+              }}
               source={require("./assets/img/tabBar/search.png")}
             />
           )
@@ -135,9 +132,13 @@ export default createAppContainer(
       Add: {
         screen: addSingleStack,
         navigationOptions: {
-          tabBarIcon: (focused, tintColor) => (
+          tabBarIcon: focused => (
             <Image
-              style={{ width: sizeNotHomeButtonTabBar, height: sizeNotHomeButtonTabBar, tintColor: _handleColorIconTabBar(focused.focused) }}
+              style={{
+                width: sizeNotHomeButtonTabBar,
+                height: sizeNotHomeButtonTabBar,
+                tintColor: _handleColorIconTabBar(focused.focused)
+              }}
               source={require("./assets/img/tabBar/plus.png")}
             />
           )
@@ -146,14 +147,18 @@ export default createAppContainer(
       Authentication: {
         screen: authenticationStack,
         navigationOptions: {
-          tabBarIcon: (focused, tintColor) => (
+          tabBarIcon: focused => (
             <Image
-              style={{ width: sizeNotHomeButtonTabBar, height: sizeNotHomeButtonTabBar, tintColor: _handleColorIconTabBar(focused.focused) }}
+              style={{
+                width: sizeNotHomeButtonTabBar,
+                height: sizeNotHomeButtonTabBar,
+                tintColor: _handleColorIconTabBar(focused.focused)
+              }}
               source={require("./assets/img/tabBar/user.png")}
             />
           )
         }
-      },
+      }
     },
     {
       initialRouteName: "Home",
@@ -161,6 +166,6 @@ export default createAppContainer(
         showIcon: true,
         showLabel: false
       }
-    },
+    }
   )
 );

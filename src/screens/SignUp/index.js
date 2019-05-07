@@ -3,7 +3,7 @@ import { Text, View  } from 'react-native';
 
 export default class SignUpScreen extends Component {
   static navigationOptions = {
-    title: 'Inscription',
+    title: 'INSCRIPTION',
     headerRight: (<View></View>) // To perfectly center title with back chevron
   };
 

@@ -23,7 +23,7 @@ export default class MapScreen extends Component {
   }
 
   static navigationOptions = {
-    title: 'A proximité',
+    title: 'A PROXIMITE',
   };
 
   async componentWillMount() {
@@ -94,6 +94,5 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
     flex: 1,
-    // alignItems: "center"
   },
 });

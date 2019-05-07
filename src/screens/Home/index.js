@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity, Platform } from 'react-native'
 import GoogleMaps from '../../components/GoogleMaps';
 import GoogleAutocomplete from '../../components/GoogleAutocomplete'
+import axios from "axios";
+import { requestLocationPermission } from "../../utils/PermissionsAndroid";
 
 
 export default class HomeScreen extends Component {

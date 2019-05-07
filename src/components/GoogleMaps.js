@@ -4,8 +4,6 @@ import {
   View,
 } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import axios from "axios";
-import { requestLocationPermission } from "../utils/PermissionsAndroid";
 
 // PARAMS GOOGLE PLACES AUTOCOMPLETe
 // const homePlace = {description: 'Home', geometry: { location: { lat: 48.8152937, lng: 2.4597668 } }};

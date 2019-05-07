@@ -7,10 +7,6 @@ export default class GoogleAutocomplete extends Component {
 
   constructor (props) {
     super(props)
-
-    // const { displayResultGooglePlacesSearch } = this.state.googlePlaces;
-    // const { latitudeDelta, longitudeDelta } = this.state.location;
-
     this.state = {
       latitudeDelta: this.props.location.latitudeDelta,
       longitudeDelta: this.props.location.longitudeDelta,
@@ -31,7 +27,7 @@ export default class GoogleAutocomplete extends Component {
         enablePoweredByContainer={false}
         renderDescription={row =>
           row.description || row.formatted_address || row.name
-        } // (TODO: vérifier) custom description render
+        }
         onPress={(data, details = null) => {
           this.setState({
             location:{
@@ -43,12 +39,11 @@ export default class GoogleAutocomplete extends Component {
           });
         }}
         getDefaultValue={() => ""}
-        // getDefaultValue={() => this.state.textInput}
         query={{
           // available options: https://developers.google.com/places/web-service/autocomplete
           key: Config.GOOGLE_MAPS_API_KEY,
-          language: "fr", // (TODO: vérifier) language of the results
-          types: "(cities)" // default: 'geocode'
+          language: "fr",
+          types: "(cities)"
         }}
         styles={{
           textInputContainer: {
@@ -65,27 +60,8 @@ export default class GoogleAutocomplete extends Component {
           }
         }}
         currentLocation={false} // Will add a 'Current location' button at the top of the predefined places list
-        // // currentLocationLabel="Current location"
-        // nearbyPlacesAPI="GooglePlacesSearch" // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
-        // GoogleReverseGeocodingQuery={
-        //   {
-        //     // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
-        //   }
-        // }
-        // GooglePlacesSearchQuery={{
-        //   // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search
-        //   rankby: "distance",
-        //   type: "cafe"
-        // }}
-        // GooglePlacesDetailsQuery={{
-        //   // available options for GooglePlacesDetails API : https://developers.google.com/places/web-service/details
-        //   fields: "formatted_address"
-        // }}
-        // filterReverseGeocodingByTypes={[
-        //   "locality",
-        //   "administrative_area_level_3"
-        // ]} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities
-        // // predefinedPlaces={[homePlace, workPlace]}
+        // currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
+        // currentLocationLabel="Position actuele"
   
         debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
         renderLeftButton={() => (
@@ -100,7 +76,7 @@ export default class GoogleAutocomplete extends Component {
               });
             }}
           >
-            <Text> Left Button or Left Icon </Text>
+            <Text> {"<-"} </Text>
           </TouchableOpacity>
         )}
       />

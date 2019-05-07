@@ -5,10 +5,6 @@ import {
 } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 
-// PARAMS GOOGLE PLACES AUTOCOMPLETe
-// const homePlace = {description: 'Home', geometry: { location: { lat: 48.8152937, lng: 2.4597668 } }};
-// const workPlace = {description: 'Work', geometry: { location: { lat: 48.8496818, lng: 2.2940881 } }};
-
 export default class GoogleMaps extends Component {
   constructor(props) {
     super(props);
@@ -24,7 +20,6 @@ export default class GoogleMaps extends Component {
           showsMyLocationButton={false}
           showsUserLocation={true}
         />
-        {/* TODO: hide when google places search is visible */}
       </View>
     );
   }

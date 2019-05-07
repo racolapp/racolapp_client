@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Platform } from 'react-native'
 import GoogleMaps from '../../components/GoogleMaps';
 import GoogleAutocomplete from '../../components/GoogleAutocomplete'
@@ -67,13 +67,13 @@ export default class MapScreen extends Component {
     return { latitude, longitude, latitudeDelta, longitudeDelta };
   };
 
-  
-  render(){
+
+  render() {
     return (
       <>
         <GoogleAutocomplete googlePlaces={this.state.googlePlaces} location={this.state.location} />
-        {/* ATTENTION: le component GoogleMaps n'affichera rien si wrappé dans autre chose que des chevrons vides */}
-        <GoogleMaps region={this._setRegion()}/>
+        <GoogleMaps region={this._setRegion()} />
+        {/* TODO: Hide when GoogleAutocomplete search list is active */}
         <View style={styles.bottomContainer}>
           <TouchableOpacity onPress={this._setLocation} style={styles.button}>
             <Text style={styles.textWhite}> MOVE TO LOCATION </Text>
@@ -87,6 +87,8 @@ export default class MapScreen extends Component {
 const styles = StyleSheet.create({
   bottomContainer: {
     position: "absolute",
+    width: "100%",
+    alignItems: "center",
     bottom: 25
   },
   button: {

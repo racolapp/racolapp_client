@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity, Keyboard } from 'react-native'
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Config from 'react-native-config'
 

@@ -1,15 +1,16 @@
 import React, {Component} from 'react';
 import { Text, View  } from 'react-native';
 
-export default class AddScreen extends Component {
+export default class SignUpScreen extends Component {
   static navigationOptions = {
-    title: 'Nouvel évènement',
+    title: 'Inscription',
+    headerRight: (<View></View>) // To perfectly center title with back chevron
   };
 
     render() {
       return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text>Add an event!</Text>
+          <Text>Sign Up!</Text>
         </View>
       );
     }

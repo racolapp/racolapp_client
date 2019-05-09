@@ -94,7 +94,7 @@ export default createAppContainer(
                 height: sizeNotHomeButtonTabBar,
                 tintColor: _handleColorIconTabBar(focused.focused)
               }}
-              source={require("./assets/img/tabBar/calendar.png")}
+              source={require("./assets/img/tabBar/joinEvent.png")}
             />
           )
         }
@@ -109,7 +109,7 @@ export default createAppContainer(
                 height: sizeNotHomeButtonTabBar,
                 tintColor: _handleColorIconTabBar(focused.focused)
               }}
-              source={require("./assets/img/tabBar/invite.png")}
+              source={require("./assets/img/tabBar/inviteEvent.png")}
             />
           )
         }

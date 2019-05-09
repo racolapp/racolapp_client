@@ -9,8 +9,8 @@ class EventAbstract extends Component{
         return(
             <TouchableOpacity
             onPress={() => navigation.navigate('SingleEventDetails', {id, longitude, latitude})}>
-                <View style={styles.result}>
-                    <Text>{title}</Text>
+                <View>
+                    <Text style={styles.text}>{title}</Text>
                 </View>
             </TouchableOpacity>
         )
@@ -20,8 +20,7 @@ class EventAbstract extends Component{
 export default withNavigation(EventAbstract);
 
 const styles = StyleSheet.create({
-    result: {
-        backgroundColor: "yellow",
-        width: 50, 
-    },
+    text: {
+        textAlign: "center",
+    }
   });

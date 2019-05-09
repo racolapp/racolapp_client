@@ -39,7 +39,7 @@ export default class SingleEventDetailsScreen extends Component {
         <View style={{ flex: 2 }}>
           <Text style={globalStyles.h2}>DESCRIPTIF</Text>
         </View>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, width: "90%", }}>
           <TouchableOpacity style={globalStyles.button}>
             <Text style={globalStyles.buttonText}>S'INSCRIRE</Text>
           </TouchableOpacity>

@@ -77,7 +77,7 @@ export default class MapScreen extends Component {
             <View style={{ marginRight: 15}}>
               <TouchableOpacity onPress={this._setLocation} >
                 <Image
-                  style={{ width: 25, height: 25 }}
+                  style={{ width: 25, height: 25, }}
                   source={require("../../../assets/img/googlePlaceSearch/gpsIndicator.png")}
                 />
               </TouchableOpacity>

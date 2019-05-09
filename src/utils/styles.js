@@ -29,11 +29,13 @@ const globalStyles = StyleSheet.create({
   },
   button: {
     backgroundColor: styleMainColor,
-    borderRadius: 5,
-    padding: 10
+    borderRadius: 20,
+    padding: 10,
+    // width: "80%",
   },
   buttonText: {
-    color: "white"
+    color: "white",
+    textAlign: "center"
   }
 });
 

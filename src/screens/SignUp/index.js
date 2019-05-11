@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-import { View, StyleSheet, FlatList } from "react-native";
+import { View, StyleSheet, FlatList, Text, TouchableOpacity } from "react-native";
+import {
+  setStorage,
+  readStorage,
+  removeStorage
+} from "../../utils/asyncStorage";
 
 export default class App extends Component {
   renderItem({ item, index }) {
@@ -17,24 +22,24 @@ export default class App extends Component {
       />
     );
   }
+
+  _read = async () => {
+    console.log("HELLO SIGN UP!");
+    await readStorage("user");
+  };
+
   render() {
     return (
-      <FlatList
-        contentContainerStyle={styles.list}
-        data={[
-          { key: "a" },
-          { key: "b" },
-          { key: "c" },
-          { key: "d" },
-          { key: "e" },
-          { key: "f" },
-          { key: "g" },
-          { key: "h" },
-          { key: "i" },
-          { key: "j" }
-        ]}
-        renderItem={this.renderItem}
-      />
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text>SIGN UP!</Text>
+        <TouchableOpacity
+          onPress={() => {
+            this._read();
+          }}
+        >
+          <Text> TEST HERE </Text>
+        </TouchableOpacity>
+      </View>
     );
   }
 }

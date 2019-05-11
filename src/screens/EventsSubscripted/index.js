@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, FlatList } from "react-native";
-import EventAbstract from "../../components/EventAbstract";
-import { globalStyles, styleMainColor } from "../../utils/styles";
+import EventList from "../../components/EventList";
 
 const jsonFetched = [
   {
@@ -27,24 +25,10 @@ export default class EventsSubscriptedScreen extends Component {
 
   constructor(props) {
     super(props);
-    this._events = jsonFetched; // TODO: temporaire à remplacer par this._events = [] quand api OK
+    this.events = jsonFetched; // TODO: temporaire à remplacer par this._events = [] quand api OK (passer par state ??)
   }
 
-  _renderListEvents = () => (
-    <FlatList
-      showsVerticalScrollIndicator={false}
-      data={this._events}
-      keyExtractor={singleEvent => singleEvent.id.toString()}
-      renderItem={({ item }) => {
-        const { id, title, description } = item;
-        return (
-          <EventAbstract id={id} title={title} description={description} />
-        );
-      }}
-    />
-  );
-
   render() {
-    return <>{this._renderListEvents()}</>;
+    return <EventList events={this.events}/>
   }
 }

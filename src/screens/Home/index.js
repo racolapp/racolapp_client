@@ -9,6 +9,7 @@ import {
   Dimensions
 } from "react-native";
 import EventAbstract from "../../components/EventAbstract";
+import { globalStyles, styleMainColor } from "../../utils/styles";
 
 const jsonFetched = [
   {
@@ -55,7 +56,7 @@ export default class HomeScreen extends Component {
 
   constructor(props) {
     super(props);
-    this._events = jsonFetched; // temporaire à remplacer par this._events = [] quand api OK
+    this._events = jsonFetched; // TODO: temporaire à remplacer par this._events = [] quand api OK
   }
 
   // TODO
@@ -74,16 +75,27 @@ export default class HomeScreen extends Component {
         data={this._events}
         keyExtractor={singleEvent => singleEvent.id.toString()}
         renderItem={({ item }) => {
+          const { id, longitude, latitude, title, description } = item;
           return (
-            <View style={styles.itemRendered}>
-              <EventAbstract
-                id={item.id}
-                longitude={item.longitude}
-                latitude={item.latitude}
-                title={item.title}
-                description={item.description}
-              />
-            </View>
+            <TouchableOpacity
+              onPress={() =>
+                this.props.navigation.navigate("SingleEventDetails", {
+                  id,
+                  longitude,
+                  latitude,
+                })
+              }
+            >
+              <View style={styles.itemRendered}>
+                <EventAbstract
+                  id={id}
+                  longitude={longitude}
+                  latitude={latitude}
+                  title={title}
+                  description={description}
+                />
+              </View>
+            </TouchableOpacity>
           );
         }}
       />
@@ -91,9 +103,7 @@ export default class HomeScreen extends Component {
   };
 
   render() {
-    return (
-        this._renderListEvents()
-    );
+    return this._renderListEvents();
   }
 }
 
@@ -101,13 +111,11 @@ const styles = StyleSheet.create({
   itemRendered: {
     margin: 15,
     padding: 5,
-    width: "40%",
-    height: 150,
-    backgroundColor: "#DADADA",
+    backgroundColor: styleMainColor,
     borderRadius: 15
   },
-  row:{
+  row: {
     flex: 1,
-    justifyContent: "space-around",
+    justifyContent: "space-around"
   }
 });

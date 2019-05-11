@@ -1,7 +1,20 @@
 import React, { Component } from "react";
-import { Text, View, TouchableOpacity, Alert } from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  Alert,
+  TextInput,
+  KeyboardAvoidingView,
+  StyleSheet
+} from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
-import { setStorage, readStorage, removeStorage } from "../../utils/asyncStorage";
+import {
+  setStorage,
+  readStorage,
+  removeStorage
+} from "../../utils/asyncStorage";
+import { globalStyles, styleMainColor } from "../../utils/styles";
 
 const urlLogin = "http://localhost:4242/api/auth/login";
 
@@ -26,8 +39,8 @@ export default class SignInScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pseudo: "mytest",
-      password: "mypassword"
+      pseudo: "",
+      password: ""
       // errorOnLog: false
     };
   }
@@ -70,23 +83,111 @@ export default class SignInScreen extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text>HOME! List of results</Text>
-        <TouchableOpacity
-          onPress={() => {
-            this.props.navigation.navigate("SignUp");
+      <KeyboardAvoidingView
+        style={{
+          flex: 1,
+          justifyContent: "space-between",
+          alignItems: "center"
+        }}
+        behavior="height"
+        enabled
+      >
+        <View
+          style={{
+            flex: 0.5,
+            backgroundColor: styleMainColor,
+            width: "100%",
+            justifyContent: "center",
+            alignItems: "center"
           }}
         >
-          <Text> Go to Sign Up </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+          <Text style={{ color: "white", fontSize: 20 }}>RACOLAPP</Text>
+        </View>
+
+        <View
+          style={{
+            flex: 1,
+            width: "100%",
+            justifyContent: "flex-start",
+            alignItems: "center"
+          }}
+        >
+          <View style={styles.buttonOnTop}>
+            <TextInput
+              style={globalStyles.textInputLightRound}
+              placeholder="Enter your email"
+              placeholderTextColor={styleMainColor}
+              onChangeText={pseudo => (this.setState({pseudo}))}
+              value={this.state.pseudo}
+              // onSubmitEditing = {() => this.showMovies()}
+            />
+          </View>
+
+          <View style={styles.buttonOnBottom}>
+            <TextInput
+              style={globalStyles.textInputLightRound}
+              placeholder="Enter your password"
+              placeholderTextColor={styleMainColor}
+              type="password"
+              onChangeText={password => (this.setState({password}))}
+              value={this.state.password}
+              secureTextEntry={true}
+              // onSubmitEditing = {() => this.showMovies()}
+            />
+          </View>
+        </View>
+
+        <View style={{ flex: 1, width: "100%", alignItems: "center" }}>
+        <View style={styles.buttonOnTop}>
+            <TouchableOpacity
+              style={globalStyles.button}
+              onPress={() => {
+                this._login(userToSave);
+              }}
+            >
+              <Text style={globalStyles.buttonText}> CONTINUE </Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* TODO ???? */}
+          {/* <TouchableOpacity
           onPress={() => {
             this._login(userToSave);
           }}
         >
-          <Text> TEST HERE </Text>
-        </TouchableOpacity>
-      </View>
+          <Text> Mot de passe oublié? </Text>
+        </TouchableOpacity> */}
+
+          <View style={styles.buttonOnBottom}>
+            <TouchableOpacity
+              style={globalStyles.buttonLight}
+              onPress={() => {
+                this.props.navigation.navigate("SignUp");
+              }}
+            >
+              <Text style={globalStyles.buttonLightText}>
+                {" "}
+                CREATE AN ACCOUNT{" "}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </KeyboardAvoidingView>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  buttonOnTop: {
+    flex: 1,
+    width: "90%",
+    borderColor: styleMainColor,
+    justifyContent: "flex-end"
+  },
+  buttonOnBottom: {
+    flex: 1,
+    width: "90%",
+    borderColor: styleMainColor,
+    justifyContent: "flex-start"
+  },
+})

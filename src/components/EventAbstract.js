@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { withNavigation } from "react-navigation";
 import { globalStyles, styleMainColor } from "../utils/styles";
+import PropTypes from "prop-types";
 
-class EventAbstractWithMap extends Component {
+class EventAbstract extends Component {
   render() {
     let { id, longitude, latitude, title, description } = this.props;
     return (
@@ -15,13 +16,13 @@ class EventAbstractWithMap extends Component {
         }}
       >
         <Text style={styles.title}>{title}</Text>
-        {/* <Text style={styles.text}>{description}</Text> */}
+        <Text style={styles.text}>{description}</Text>
       </View>
     );
   }
 }
 
-export default EventAbstractWithMap;
+export default EventAbstract;
 
 const styles = StyleSheet.create({
   title: {
@@ -37,3 +38,11 @@ const styles = StyleSheet.create({
     textAlign: "center"
   }
 });
+
+EventAbstract.propTypes = {
+  id: PropTypes.number,
+  longitude: PropTypes.number,
+  latitude: PropTypes.number,
+  title: PropTypes.string,
+  description: PropTypes.string
+}

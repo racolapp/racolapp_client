@@ -73,7 +73,7 @@ export default class MapScreen extends Component {
         <GoogleMaps region={this._setRegion()} />
         <View style={{ height: "10%" }}>
           <View style={{ flex: 1, flexDirection: "row", alignItems: "center", marginLeft: 15 }}>
-            <GoogleAutocomplete googlePlaces={this.state.googlePlaces} location={this.state.location} />
+            <GoogleAutocomplete location={this.state.location} />
             <View style={{ marginRight: 15}}>
               <TouchableOpacity onPress={this._setLocation} >
                 <Image

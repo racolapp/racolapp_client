@@ -1,3 +1,5 @@
+// TODO: Voir si le clic sur le résultat d'une recherche renvoie bien au bon endroit sur la carte
+
 import React, { Component } from "react";
 import {
   StyleSheet,
@@ -7,6 +9,7 @@ import {
   Keyboard,
   Image
 } from "react-native";
+import PropTypes from "prop-types";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Config from "react-native-config";
 
@@ -16,13 +19,13 @@ export default class GoogleAutocomplete extends Component {
     this.state = {
       latitudeDelta: this.props.location.latitudeDelta,
       longitudeDelta: this.props.location.longitudeDelta,
-      displayResultGooglePlacesSearch: this.props.googlePlaces
+      displayResultGooglePlacesSearch: "false"
     };
   }
 
   _renderGooglePlacesAutocomplete = () => (
     <GooglePlacesAutocomplete
-      placeholder="Search"
+      placeholder="Chercher"
       minLength={2}
       autoFocus={false}
       returnKeyType={"search"}
@@ -33,7 +36,7 @@ export default class GoogleAutocomplete extends Component {
       renderDescription={row =>
         row.description || row.formatted_address || row.name
       }
-      onPress={(data, details = null) => {
+      onPress={(details = null) => {
         this.setState({
           location: {
             latitude: details.geometry.location.lat,
@@ -87,16 +90,19 @@ export default class GoogleAutocomplete extends Component {
   );
 
   render() {
-    const {
-      displayResultGooglePlacesSearch
-    } = this.state.displayResultGooglePlacesSearch;
-    console.log(displayResultGooglePlacesSearch);
     return (
       <>
-        {displayResultGooglePlacesSearch == "false" &&
+        {this.state.displayResultGooglePlacesSearch == "false" &&
           this._renderHideGooglePlacesResult()}
         {this._renderGooglePlacesAutocomplete()}
       </>
     );
   }
+}
+
+GoogleAutocomplete.propTypes = {
+  location: PropTypes.shape({
+      latitudeDelta: PropTypes.number.isRequired,
+      longitudeDelta: PropTypes.number.isRequired,
+    })
 }

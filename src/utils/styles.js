@@ -4,7 +4,6 @@ import { Text, View, StyleSheet } from "react-native";
 const styleMainColor = "#2699FB";
 const styleOnMainColor = "#1D6098";
 
-
 // STYLE HEADER NAVIGATION
 const styleNavigationHeaderStyle = {
   headerStyle: {
@@ -22,7 +21,6 @@ const styleNavigationHeaderStyle = {
 const sizeHomeButtonTabBar = 40;
 const sizeNotHomeButtonTabBar = 25;
 
-
 // STYLES FOR MULTIPLE SCREENS
 const globalStyles = StyleSheet.create({
   h2: {
@@ -30,53 +28,59 @@ const globalStyles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 20,
     padding: 10,
-    textAlign: "center",
+    textAlign: "center"
   },
   h3: {
     color: styleMainColor,
     textAlign: "left",
     fontSize: 15,
     padding: 5,
-    marginTop: 10,
+    marginTop: 10
+  },
+  h3Flex1: {
+    flex: 1
   },
   button: {
     backgroundColor: styleMainColor,
     borderRadius: 20,
     padding: 10,
     marginTop: 10,
-    marginBottom: 10,
+    marginBottom: 10
   },
   buttonText: {
     color: "white",
     textAlign: "center"
   },
-  buttonLight:{
+  buttonLight: {
     borderRadius: 20,
     padding: 10,
     borderColor: styleMainColor,
-    borderWidth: 2,
+    borderWidth: 2
   },
-  buttonLightText:{
+  buttonLightText: {
     color: styleMainColor,
-    textAlign: "center",
+    textAlign: "center"
   },
-  textInputLightRound:{
+  textInputLightRound: {
     borderRadius: 25,
     padding: 10,
     marginTop: 5,
     borderColor: styleMainColor,
     borderWidth: 2,
-    color: styleMainColor,
+    color: styleMainColor
   },
-  textInputLightRectangular:{
+  textInputLightRectangular: {
     padding: 10,
     marginTop: 10,
     marginBottom: 10,
     borderColor: styleMainColor,
     borderWidth: 2,
     color: styleMainColor,
-    textAlign: "left",
+    textAlign: "left"
   },
+  textInputLightRectangularFlex1: {
+    flex: 1
+  }
 });
 
 export {

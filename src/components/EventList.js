@@ -9,15 +9,8 @@ export default class EventList extends Component {
     super(props);
   }
 
-  _renderListEvents = () => {
-    console.log("+++++++++++++++++++++++++++++++++++++++")
-    console.log("+++++++++++++++++++++++++++++++++++++++")
-    console.log("+++++++++++++++++++++++++++++++++++++++")
-    console.log("+++++++++++++++++++++++++++++++++++++++")
-    console.log("+++++++++++++++++++++++++++++++++++++++")
-    console.log("+++++++++++++++++++++++++++++++++++++++")
-    console.log(this.props.events);
-    return <FlatList
+  _renderListEvents = () => (
+    <FlatList
       showsVerticalScrollIndicator={false}
       data={this.props.events}
       keyExtractor={singleEvent => singleEvent.id.toString()}
@@ -28,7 +21,7 @@ export default class EventList extends Component {
         );
       }}
     />
-    };
+    );
 
   render() {
     return <>{this._renderListEvents()}</>;

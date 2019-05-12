@@ -15,6 +15,7 @@ import {
 } from "../../utils/asyncStorage";
 import { globalStyles, styleMainColor } from "../../utils/styles";
 import DatePicker from "react-native-datepicker";
+import SearchableDropdown from 'react-native-searchable-dropdown';
 
 export default class App extends Component {
   static navigationOptions = {
@@ -146,6 +147,39 @@ export default class App extends Component {
             {this._listResultLocation()}
           </Picker>
           {console.log(this.state)}
+        </View>
+
+        <View>
+        <SearchableDropdown
+        // onTextChange={text => alert(text)}
+        onTextChange={searchedLocation => {
+          this.setState({ searchedLocation });
+          this._searchLocation(this.state.searchedLocation);
+        }}
+        // onItemSelect={item => alert(JSON.stringify(item))}
+        containerStyle={{ padding: 5 }}
+        textInputStyle={{
+          padding: 12,
+          borderWidth: 1,
+          borderColor: '#ccc',
+          borderRadius: 5,
+        }}
+        itemStyle={{
+          padding: 10,
+          marginTop: 2,
+          backgroundColor: '#ddd',
+          borderColor: '#bbb',
+          borderWidth: 1,
+          borderRadius: 5,
+        }}
+        itemTextStyle={{ color: '#222' }}
+        itemsContainerStyle={{ maxHeight: 140 }}
+        items={this.resultToSearchLocation}
+        defaultIndex={2}
+        placeholder="placeholder"
+        resetValue={false}
+        underlineColorAndroid="transparent"
+      />
         </View>
 
         <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>

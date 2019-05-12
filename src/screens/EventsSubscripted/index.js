@@ -3,18 +3,18 @@ import EventList from "../../components/EventList";
 
 const jsonFetched = [
   {
-    id: 1,
-    title: "This is a title 1",
+    ID: 1,
+    name: "This is a title 1",
     description: "This is a description"
   },
   {
-    id: 2,
-    title: "This is a title 2",
+    ID: 2,
+    name: "This is a title 2",
     description: "This is a description"
   },
   {
-    id: 3,
-    title: "This is a title 3",
+    ID: 3,
+    name: "This is a title 3",
     description: "This is a description"
   }
 ];

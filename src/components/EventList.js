@@ -13,11 +13,11 @@ export default class EventList extends Component {
     <FlatList
       showsVerticalScrollIndicator={false}
       data={this.props.events}
-      keyExtractor={singleEvent => singleEvent.id.toString()}
+      keyExtractor={singleEvent => singleEvent.ID.toString()}
       renderItem={({ item }) => {
-        const { id, title, description } = item;
+        const { ID, name, description } = item;
         return (
-          <EventAbstract id={id} title={title} description={description} />
+          <EventAbstract id={ID} title={name} description={description} />
         );
       }}
     />

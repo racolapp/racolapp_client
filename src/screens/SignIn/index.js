@@ -75,7 +75,7 @@ export default class SignInScreen extends Component {
     else {
       await setStorage("user", json);
       // TODO: supprimer (pour le test)
-      await readStorage("user");
+      // await readStorage("user");
       // await removeStorage("user");
       // await readStorage("user");
     }

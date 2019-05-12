@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView } from "react-native";
 import { globalStyles, styleMainColor } from "../utils/styles";
 import PropTypes from "prop-types";
 
@@ -7,16 +7,19 @@ class EventAbstract extends Component {
   render() {
     let { id, longitude, latitude, title, description } = this.props;
     return (
-      <View
+      <ScrollView
         style={{
           backgroundColor: styleMainColor,
           marginBottom: 10,
           padding: 20
         }}
+        showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title} >
+          {title}
+        </Text>
         <Text style={styles.text}>{description}</Text>
-      </View>
+      </ScrollView>
     );
   }
 }
@@ -44,4 +47,4 @@ EventAbstract.propTypes = {
   latitude: PropTypes.number,
   title: PropTypes.string,
   description: PropTypes.string
-}
+};

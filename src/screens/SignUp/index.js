@@ -6,7 +6,8 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
-  ScrollView
+  ScrollView,
+  Alert,
 } from "react-native";
 import {
   setStorage,
@@ -14,6 +15,7 @@ import {
   removeStorage
 } from "../../utils/asyncStorage";
 import { globalStyles, styleMainColor } from "../../utils/styles";
+
 
 export default class App extends Component {
   static navigationOptions = {
@@ -23,21 +25,65 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pseudo: "",
-      mail: "",
-      password: "",
-      birthday: "",
-      country: "",
-      state: "",
-      city: ""
+      pseudo: "Bob",
+      mail: "bob@gmail.com",
+      password: "bob",
+      password_confirm: "bob",
+      // birthday: "",
+      // country: "",
+      // state: "",
+      // city: ""
       // errorOnLog: false
     };
   }
 
-  _read = async () => {
-    console.log("HELLO SIGN UP!");
-    await readStorage("user");
-  };
+
+_signUp = async () => {
+  const response = await fetch("https://racolapp.herokuapp.com/users", {
+  headers: {
+    "Content-Type": "application/json"
+  },
+  method: "POST",
+  body: JSON.stringify(this.state)
+});
+
+console.log("############# RESPONSE ###############");
+console.log(response);
+
+const json = await response.json();
+
+console.log("############# RESPONSE JSON ###############");
+console.log(json);
+// I'M CONNECTED
+if (json.err) {
+  Alert.alert(
+    "Erreur d'authentification",
+    "Mot de passe ou identifiant incorrect",
+    [
+      {
+        text: "OK",
+        onPress: () => console.log("Authentification error - OK pressed")
+      }
+    ]
+  );
+}
+else {
+  await setStorage("user", json);
+
+  // //////
+  // localStorage.setItem("token", json.meta.token);
+  // localStorage.setItem("uuid",json.data.user.uuid);
+  // localStorage.setItem("userNickname", json.data.user.nickname);
+  // localStorage.setItem("userEmail",json.data.user.email);
+  // this.props.connect(json.data.user);
+}
+
+};
+
+  // _read = async () => {
+  //   console.log("HELLO SIGN UP!");
+  //   await readStorage("user");
+  // };
 
   render() {
     return (
@@ -61,7 +107,7 @@ export default class App extends Component {
           onChangeText={mail => this.setState({ mail })}
           value={this.state.mail}
         />
-        <Text style={globalStyles.h3}>Password</Text>
+        <Text style={globalStyles.h3}>Mot de passe</Text>
         <TextInput
           style={globalStyles.textInputLightRectangular}
           placeholder="Mot de passe"
@@ -70,8 +116,17 @@ export default class App extends Component {
           onChangeText={password => this.setState({ password })}
           value={this.state.password}
         />
+        <Text style={globalStyles.h3}>Confirmation du mot de passe</Text>
+        <TextInput
+          style={globalStyles.textInputLightRectangular}
+          placeholder="Confirmation du mot de passe"
+          placeholderTextColor={styleMainColor}
+          secureTextEntry={true}
+          onChangeText={password_confirm => this.setState({ password_confirm })}
+          value={this.state.password_confirm}
+        />
 
-        {/* DETAILS SECTION */}
+        {/* DETAILS SECTION
         <Text style={globalStyles.h2}>Informations personnelles</Text>
         <Text style={globalStyles.h3}>Date de naissance</Text>
         <TextInput
@@ -104,15 +159,15 @@ export default class App extends Component {
           placeholderTextColor={styleMainColor}
           onChangeText={city => this.setState({ city })}
           value={this.state.city}
-        />
+        />*/}
         <TouchableOpacity
           style={globalStyles.button}
-          // onPress={() => {
-          //   this._login(userToSave);
-          // }}
+          onPress={() => {
+            this._signUp();
+          }}
         >
           <Text style={globalStyles.buttonText}> VALIDER </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> 
       </ScrollView>
     );
   }

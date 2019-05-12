@@ -5,7 +5,8 @@ import {
   FlatList,
   StyleSheet,
   Image,
-  Platform
+  Platform,
+  Alert,
 } from "react-native";
 import EventAbstract from "../../components/EventAbstract";
 import { globalStyles, styleMainColor } from "../../utils/styles";
@@ -15,24 +16,24 @@ import { connect } from "react-redux";
 
 const jsonFetched = [
   {
-    id: 1,
-    longitude: 2.3488,
-    latitude: 48.8534,
-    title: "This is a title 1",
+    ID: 1,
+    long: "2.3488",
+    lat: "48.8534",
+    name: "This is a title 1",
     description: "This is a description"
   },
   {
-    id: 2,
-    longitude: 2,
-    latitude: 48,
-    title: "This is a title 2",
-    description: "This is a description"
+    ID: 2,
+    long: "2",
+    lat: "48",
+    name: "This is a title 2",
+    description: "This is a very very very very very very very very very very very very very very long description"
   },
   {
-    id: 3,
-    longitude: 2.5,
-    latitude: 49,
-    title: "This is a title 3",
+    ID: 3,
+    long: "2.5",
+    lat: "49",
+    name: "This is a title 3",
     description: "This is a description"
   }
 ];
@@ -58,13 +59,20 @@ class HomeScreen extends Component {
 
   constructor(props) {
     super(props);
-    this._events = jsonFetched; // TODO: temporaire à remplacer par this._events = [] quand api OK
+    // TODO: temporaire à remplacer par this._events = [] quand api OK
+    // this.state = {
+    //   _events: jsonFetched,
+    //  }
+    this.state = {
+      _events: [],
+     }
   }
 
   async componentWillMount() {
     if (Platform.OS == "android") {
       await requestLocationPermission();
       this._setLocation();
+      this._loadEvents();
     }
   }
 
@@ -82,16 +90,61 @@ class HomeScreen extends Component {
         };
         this.props.dispatch(action);
       },
-      error => {console.log(`ERROR IN GETTING LOCATION: ${error.message}`)},
+      error => {
+        console.log(`ERROR IN GETTING LOCATION: ${error.message}`);
+        Alert.alert(
+          "Impossible de récupérer votre localisation",
+          "Vérifiez vos paramètres",
+          [
+            {
+              text: "OK",
+              onPress: () => console.log("Location error - OK pressed")
+            }
+          ]
+        );
+      
+      },
       { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 }
     );
   };
 
   // TODO
-  _loadEvents = () => {
-    // TODO: requete AXIOS
-    // TODO: setState this._events
-  };
+  _loadEvents = async () => {
+    const response = await fetch("https://racolapp.herokuapp.com/events/", {
+      headers: {
+        "Content-Type": "application/json"
+        // "Authorization": `Bearer ${token}`
+      },
+      method: "GET",
+    });
+
+    if (response.error) {
+      console.log(response.error);
+    }
+    else {
+      const json = await response.json();
+      console.log("response")
+      console.log(json)
+      this.setState({
+        _events: json.data,
+      })
+      console.log("EVENTS STATE")
+      console.log(this.state._events)
+      if (this.state._events == []){
+        Alert.alert(
+          "Aucun évènement dans vos environs",
+          "Regardez dans une autre zone",
+          [
+            {
+              text: "OK",
+              onPress: () => console.log("Any event returned - OK pressed")
+            }
+          ]
+        );
+      }
+    }
+
+      };
 
   _renderListEvents = () => {
     return (
@@ -100,26 +153,26 @@ class HomeScreen extends Component {
         columnWrapperStyle={styles.row}
         horizontal={false}
         showsVerticalScrollIndicator={false}
-        data={this._events}
-        keyExtractor={singleEvent => singleEvent.id.toString()}
+        data={this.state._events}
+        keyExtractor={singleEvent => singleEvent.ID.toString()}
         renderItem={({ item }) => {
-          const { id, longitude, latitude, title, description } = item;
+          const { ID, long, lat, name, description } = item;
           return (
             <TouchableOpacity
               onPress={() =>
                 this.props.navigation.navigate("SingleEventDetails", {
-                  id,
-                  longitude,
-                  latitude,
+                  id:ID,
+                  longitude:Number(long),
+                  latitude:Number(lat),
                 })
               }
             >
               <View style={styles.itemRendered}>
                 <EventAbstract
-                  id={id}
-                  longitude={longitude}
-                  latitude={latitude}
-                  title={title}
+                  id={ID}
+                  longitude={Number(long)}
+                  latitude={Number(lat)}
+                  title={name}
                   description={description}
                 />
               </View>
@@ -145,7 +198,9 @@ const styles = StyleSheet.create({
     margin: 15,
     padding: 5,
     backgroundColor: styleMainColor,
-    borderRadius: 15
+    borderRadius: 15,
+    width: 200,
+    height: 200
   },
   row: {
     flex: 1,

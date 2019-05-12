@@ -1,15 +1,17 @@
 import React, { Component } from "react";
 import {
-  Text,
   View,
   TouchableOpacity,
   FlatList,
   StyleSheet,
   Image,
-  Dimensions
+  Platform
 } from "react-native";
 import EventAbstract from "../../components/EventAbstract";
 import { globalStyles, styleMainColor } from "../../utils/styles";
+import { requestLocationPermission } from "../../utils/PermissionsAndroid";
+import { connect } from "react-redux";
+
 
 const jsonFetched = [
   {
@@ -35,7 +37,7 @@ const jsonFetched = [
   }
 ];
 
-export default class HomeScreen extends Component {
+class HomeScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: "A PROXIMITE",
@@ -58,6 +60,32 @@ export default class HomeScreen extends Component {
     super(props);
     this._events = jsonFetched; // TODO: temporaire à remplacer par this._events = [] quand api OK
   }
+
+  async componentWillMount() {
+    if (Platform.OS == "android") {
+      await requestLocationPermission();
+      this._setLocation();
+    }
+  }
+
+  _setLocation = () => {
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        const action = {
+          type: "SET_LOCATION",
+          value: {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
+          }
+        };
+        this.props.dispatch(action);
+      },
+      error => {console.log(`ERROR IN GETTING LOCATION: ${error.message}`)},
+      { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 }
+    );
+  };
 
   // TODO
   _loadEvents = () => {
@@ -106,6 +134,11 @@ export default class HomeScreen extends Component {
     return this._renderListEvents();
   }
 }
+
+const mapStateToProps = state => {
+  return { location: state.location };
+};
+export default connect(mapStateToProps)(HomeScreen);
 
 const styles = StyleSheet.create({
   itemRendered: {

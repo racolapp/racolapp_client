@@ -12,13 +12,12 @@ import {
 import PropTypes from "prop-types";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Config from "react-native-config";
+import { connect } from "react-redux";
 
-export default class GoogleAutocomplete extends Component {
+class GoogleAutocomplete extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      latitudeDelta: this.props.location.latitudeDelta,
-      longitudeDelta: this.props.location.longitudeDelta,
       displayResultGooglePlacesSearch: "false"
     };
   }
@@ -37,14 +36,16 @@ export default class GoogleAutocomplete extends Component {
         row.description || row.formatted_address || row.name
       }
       onPress={(details = null) => {
-        this.setState({
-          location: {
+        const action = {
+          type: "SET_LOCATION",
+          value: {
             latitude: details.geometry.location.lat,
             longitude: details.geometry.location.lng,
-            latitudeDelta: this.state.latitudeDelta,
-            longitudeDelta: this.state.longitudeDelta
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
           }
-        });
+        };
+        return this.props.dispatch(action);
       }}
       getDefaultValue={() => ""}
       query={{
@@ -71,7 +72,7 @@ export default class GoogleAutocomplete extends Component {
     />
   );
 
-  _renderHideGooglePlacesResult = () => (
+  _renderButtonHideGooglePlacesResult = () => (
     <TouchableOpacity
       onPress={() => {
         Keyboard.dismiss();
@@ -92,13 +93,17 @@ export default class GoogleAutocomplete extends Component {
   render() {
     return (
       <>
-        {this.state.displayResultGooglePlacesSearch == "false" &&
-          this._renderHideGooglePlacesResult()}
+        {this._renderButtonHideGooglePlacesResult()}
         {this._renderGooglePlacesAutocomplete()}
       </>
     );
   }
 }
+
+const mapStateToProps = state => {
+  return { location: state.location };
+};
+export default connect(mapStateToProps)(GoogleAutocomplete);
 
 GoogleAutocomplete.propTypes = {
   location: PropTypes.shape({

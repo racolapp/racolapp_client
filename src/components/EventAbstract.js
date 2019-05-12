@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import { withNavigation } from "react-navigation";
 import { globalStyles, styleMainColor } from "../utils/styles";
 import PropTypes from "prop-types";
 

@@ -20,6 +20,8 @@ import {
   sizeHomeButtonTabBar,
   sizeNotHomeButtonTabBar
 } from "./src/utils/styles";
+import { Provider, connect } from 'react-redux';
+import store from './src/store/configureStore';
 
 const resultsStack = createStackNavigator(
   {
@@ -81,7 +83,7 @@ _handleColorIconTabBar = focused => {
   return (color = focused ? styleOnMainColor : styleMainColor);
 };
 
-export default createAppContainer(
+const AppContainer = createAppContainer(
   createBottomTabNavigator(
     {
       EventsSubscripted: {
@@ -169,3 +171,11 @@ export default createAppContainer(
     }
   )
 );
+
+export default () => {
+  return (
+    <Provider store = {store}>
+      <AppContainer/>
+    </Provider>
+  )
+};

@@ -80,7 +80,16 @@ const globalStyles = StyleSheet.create({
   },
   textInputLightRectangularFlex1: {
     flex: 1
-  }
+  },
+  datePicker: {
+    padding: 10,
+    marginTop: 10,
+    marginBottom: 10,
+    borderColor: styleMainColor,
+    borderWidth: 2,
+    flex: 1
+  },
+
 });
 
 export {

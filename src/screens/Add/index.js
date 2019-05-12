@@ -24,6 +24,7 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      searchedLocation: "",
       name: "Partie de billard",
       description: "Pour retrouver des amateurs de billard et de bonnes bières",
       location: "",
@@ -34,7 +35,43 @@ export default class App extends Component {
       TypeEventsID: "1",
       UserID: 1
     };
+    this.resultToSearchLocation = [];
   }
+
+  _searchLocation = async adress => {
+    const response = await fetch(
+      `https://api-adresse.data.gouv.fr/search/?q=${adress}`,
+      {
+        headers: {
+          "Content-Type": "application/json"
+        },
+        method: "GET"
+      }
+    );
+    const json = await response.json();
+    this.resultToSearchLocation = json.features;
+  };
+
+  _listResultLocation = () => {
+    try {
+      return this.resultToSearchLocation.map(item => {
+        return (
+          <Picker.Item
+            label={item.properties.label}
+            key={item.properties.id}
+            value={{
+              label: item.properties.label,
+              long: item.geometry.coordinates[0],
+              lat: item.geometry.coordinates[1]
+            }}
+          />
+        );
+      });
+    } catch (err) {
+      console.log("Fetch api adress failed");
+      console.log(err.message);
+    }
+  };
 
   _addEvent = async () => {
     const response = await fetch("https://racolapp.herokuapp.com/users", {
@@ -44,10 +81,6 @@ export default class App extends Component {
       method: "POST",
       body: JSON.stringify(this.state)
     });
-
-    console.log("############# RESPONSE ###############");
-    console.log(response);
-
     const json = await response.json();
     console.log("############# RESPONSE JSON ###############");
     console.log(json);
@@ -69,63 +102,6 @@ export default class App extends Component {
           onChangeText={name => this.setState({ name })}
           value={this.state.name}
         />
-        {/* <TextInput
-          style={{
-            color: "white",
-            fontSize: 15,
-            fontStyle: "italic",
-            textAlign: "center"
-          }}
-          placeholder="Et ton lieu"
-          placeholderTextColor="white"
-          onChangeText={location => this.setState({ location })}
-          value={this.state.location}
-        /> */}
-        <Picker
-          selectedValue={this.state.long}
-          onValueChange={itemValue =>
-            this.setState({
-              location: itemValue.label,
-              long: itemValue.long,
-              lat: itemValue.lat
-            })
-          }
-        >
-          <Picker.Item label="Dans quelle ville se déroulera ton évènement?" />
-          <Picker.Item
-            label="Paris - 1er arrondissement"
-            value={{
-              label: "Paris - 1er arrondissement",
-              long: 2.3488,
-              lat: 48.8534
-            }}
-          />
-          <Picker.Item
-            label="Paris - 2ème arrondissement"
-            value={{
-              label: "Paris - 2ème arrondissement",
-              long: 2.3,
-              lat: 48.8
-            }}
-          />
-          <Picker.Item
-            label="Paris - 3ème arrondissement"
-            value={{
-              label: "Paris - 3ème arrondissement",
-              long: 2.37,
-              lat: 48.88
-            }}
-          />
-          <Picker.Item
-            label="Paris - 4ème arrondissement"
-            value={{
-              label: "Paris - 4ème arrondissement",
-              long: 2.4,
-              lat: 48.9
-            }}
-          />
-        </Picker>
-        <Text>{this.state.location}</Text>
       </View>
 
       <View style={{ marginTop: 10, marginLeft: 20, marginRight: 20 }}>
@@ -137,6 +113,40 @@ export default class App extends Component {
           onChangeText={description => this.setState({ description })}
           value={this.state.description}
         />
+
+        <View style={{ flex: 1, flexDirection: "row" }}>
+          <Text style={[globalStyles.h3, globalStyles.h3Flex1]}>
+            Lieu de l'évènement
+          </Text>
+          <TextInput
+            style={[
+              globalStyles.textInputLightRectangular,
+              globalStyles.textInputLightRectangularFlex1
+            ]}
+            placeholder="A toi de nous dire"
+            placeholderTextColor={styleMainColor}
+            onChangeText={searchedLocation => {
+              this.setState({ searchedLocation });
+              this._searchLocation(this.state.searchedLocation);
+            }}
+            value={this.state.searchedLocation}
+          />
+        </View>
+        <View>
+          <Picker
+            // selectedValue={this.state.location}
+            onValueChange={value => {
+              this.setState({
+                location: value.label,
+                long: value.long,
+                lat: value.lat
+              });
+            }}
+          >
+            {this._listResultLocation()}
+          </Picker>
+          {console.log(this.state)}
+        </View>
 
         <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
           <Text style={[globalStyles.h3, globalStyles.h3Flex1]}>
@@ -158,6 +168,9 @@ export default class App extends Component {
                 borderWidth: 0
               },
               dateText: {
+                color: styleMainColor
+              },
+              placeholderText: {
                 color: styleMainColor
               }
             }}
@@ -193,7 +206,6 @@ export default class App extends Component {
             onChangeText={capacity =>
               this.setState({ capacity: Number(capacity) })
             }
-            numeric
             value={this.state.capacity}
           />
           {console.log(this.state)}

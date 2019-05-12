@@ -5,8 +5,7 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
-  ScrollView,
-  Picker
+  ScrollView
 } from "react-native";
 import {
   setStorage,
@@ -14,7 +13,6 @@ import {
   removeStorage
 } from "../../utils/asyncStorage";
 import { globalStyles, styleMainColor } from "../../utils/styles";
-import DatePicker from "react-native-datepicker";
 
 export default class App extends Component {
   static navigationOptions = {
@@ -24,34 +22,14 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "Partie de billard",
-      description: "Pour retrouver des amateurs de billard et de bonnes bières",
+      title: "",
+      description: "",
       location: "",
-      long: "",
-      lat: "",
       date: "",
       capacity: "",
-      TypeEventsID: "1",
-      UserID: 1
+      type: ""
     };
   }
-
-  _addEvent = async () => {
-    const response = await fetch("https://racolapp.herokuapp.com/users", {
-      headers: {
-        "Content-Type": "application/json"
-      },
-      method: "POST",
-      body: JSON.stringify(this.state)
-    });
-
-    console.log("############# RESPONSE ###############");
-    console.log(response);
-
-    const json = await response.json();
-    console.log("############# RESPONSE JSON ###############");
-    console.log(json);
-  };
 
   _renderScrollView = () => (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -66,10 +44,10 @@ export default class App extends Component {
           }}
           placeholder="Renseigne ici ton titre!"
           placeholderTextColor="white"
-          onChangeText={name => this.setState({ name })}
-          value={this.state.name}
+          onChangeText={title => this.setState({ title })}
+          value={this.state.title}
         />
-        {/* <TextInput
+        <TextInput
           style={{
             color: "white",
             fontSize: 15,
@@ -80,52 +58,7 @@ export default class App extends Component {
           placeholderTextColor="white"
           onChangeText={location => this.setState({ location })}
           value={this.state.location}
-        /> */}
-        <Picker
-          selectedValue={this.state.long}
-          onValueChange={itemValue =>
-            this.setState({
-              location: itemValue.label,
-              long: itemValue.long,
-              lat: itemValue.lat
-            })
-          }
-        >
-          <Picker.Item label="Dans quelle ville se déroulera ton évènement?" />
-          <Picker.Item
-            label="Paris - 1er arrondissement"
-            value={{
-              label: "Paris - 1er arrondissement",
-              long: 2.3488,
-              lat: 48.8534
-            }}
-          />
-          <Picker.Item
-            label="Paris - 2ème arrondissement"
-            value={{
-              label: "Paris - 2ème arrondissement",
-              long: 2.3,
-              lat: 48.8
-            }}
-          />
-          <Picker.Item
-            label="Paris - 3ème arrondissement"
-            value={{
-              label: "Paris - 3ème arrondissement",
-              long: 2.37,
-              lat: 48.88
-            }}
-          />
-          <Picker.Item
-            label="Paris - 4ème arrondissement"
-            value={{
-              label: "Paris - 4ème arrondissement",
-              long: 2.4,
-              lat: 48.9
-            }}
-          />
-        </Picker>
-        <Text>{this.state.location}</Text>
+        />
       </View>
 
       <View style={{ marginTop: 10, marginLeft: 20, marginRight: 20 }}>
@@ -138,35 +71,11 @@ export default class App extends Component {
           value={this.state.description}
         />
 
-        <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
+        <View style={{ flex: 1, flexDirection: "row" }}>
           <Text style={[globalStyles.h3, globalStyles.h3Flex1]}>
-            Date de l'évènement
+            Début (jj/mm/aaaa 00:00)
           </Text>
-          <DatePicker
-            style={globalStyles.datePicker}
-            date={this.state.date}
-            mode="datetime"
-            placeholder="Sélectionne le jour et l'heure"
-            format=""
-            minDate={Date.now()}
-            confirmBtnText="OK"
-            cancelBtnText="Annuler"
-            is24Hour={true}
-            showIcon={false}
-            customStyles={{
-              dateInput: {
-                borderWidth: 0
-              },
-              dateText: {
-                color: styleMainColor
-              }
-            }}
-            onDateChange={date => {
-              this.setState({ date: date });
-            }}
-          />
-
-          {/* <TextInput
+          <TextInput
             style={[
               globalStyles.textInputLightRectangular,
               globalStyles.textInputLightRectangularFlex1
@@ -175,7 +84,7 @@ export default class App extends Component {
             placeholderTextColor={styleMainColor}
             onChangeText={date => this.setState({ date })}
             value={this.state.date}
-          /> */}
+          />
         </View>
 
         <View style={{ flex: 1, flexDirection: "row" }}>
@@ -189,14 +98,9 @@ export default class App extends Component {
             ]}
             placeholder="A toi de nous dire"
             placeholderTextColor={styleMainColor}
-            keyboardType="numeric"
-            onChangeText={capacity =>
-              this.setState({ capacity: Number(capacity) })
-            }
-            numeric
+            onChangeText={capacity => this.setState({ capacity })}
             value={this.state.capacity}
           />
-          {console.log(this.state)}
         </View>
 
         <View style={{ flex: 1, flexDirection: "row" }}>
@@ -210,16 +114,17 @@ export default class App extends Component {
             ]}
             placeholder="A toi de nous dire"
             placeholderTextColor={styleMainColor}
-            onChangeText={TypeEventsID => this.setState({ TypeEventsID })}
-            value={this.state.TypeEventsID}
+            secureTextEntry={true}
+            onChangeText={type => this.setState({ type })}
+            value={this.state.type}
           />
         </View>
 
         <TouchableOpacity
           style={localStyles.button}
-          onPress={() => {
-            this._addEvent();
-          }}
+          // onPress={() => {
+          //   this._login(userToSave);
+          // }}
         >
           <Text style={globalStyles.buttonText}> VALIDE </Text>
         </TouchableOpacity>

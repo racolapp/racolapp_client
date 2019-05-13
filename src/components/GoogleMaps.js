@@ -47,6 +47,7 @@ class GoogleMaps extends Component {
                   longitude: coords.longitude,
                   latitude: coords.latitude,
                   description: metadata,
+                  date: marker.date,
                   marker : [marker]
                 })
               }

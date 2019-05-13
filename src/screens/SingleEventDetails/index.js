@@ -3,6 +3,7 @@ import { Text, View } from "react-native";
 import GoogleMaps from "../../components/GoogleMaps";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { globalStyles } from "../../utils/styles";
+import moment from "moment";
 
 export default class SingleEventDetailsScreen extends Component {
   static navigationOptions = {
@@ -24,6 +25,7 @@ export default class SingleEventDetailsScreen extends Component {
   };
 
   render() {
+    const { marker, description, date } = this.props.navigation.state.params
     return (
       <View
         style={{
@@ -36,15 +38,14 @@ export default class SingleEventDetailsScreen extends Component {
         <View style={{ flex: 3, width: "100%" }}>
           <GoogleMaps
             region={this._setRegion()}
-            markers={this.props.navigation.state.params.marker}
+            markers={marker}
           />
         </View>
         <View style={{ flex: 2 }}>
           <Text style={globalStyles.h2}>DESCRIPTIF</Text>
-          <Text style={globalStyles.h3Center}>{this.props.navigation.state.params.description}</Text>
+          <Text style={globalStyles.h3Center}>{description}</Text>
+          {date !== null && <Text style={globalStyles.h3Center}>Le {moment(date).format("LL")} à {moment(date).format("LT")}</Text>}
         </View>
-
-        {/* TODO: Intégrer d'autres données */}
 
         {/* TODO: FETCH POUR S'INSCRIRE */}
         <View style={{ flex: 1, width: "90%" }}>

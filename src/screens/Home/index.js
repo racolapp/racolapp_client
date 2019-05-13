@@ -126,7 +126,7 @@ class HomeScreen extends Component {
         data={this.props.events}
         keyExtractor={singleEvent => singleEvent.ID.toString()}
         renderItem={({ item }) => {
-          const { ID, long, lat, name, description } = item;
+          const { ID, long, lat, name, description, date } = item;
           return (
             <TouchableOpacity
               onPress={() =>
@@ -135,6 +135,7 @@ class HomeScreen extends Component {
                   longitude:Number(long),
                   latitude:Number(lat),
                   description,
+                  date, 
                   marker: [{
                     "longitude": Number(long), 
                     "latitude": Number(lat), 

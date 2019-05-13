@@ -59,12 +59,13 @@ class MapScreen extends Component {
 
   render() {
     let markers = [];
-     this.props.events.map( marker => {
+     this.props.events.map( event => {
       markers.push({
-      "longitude": Number(marker.long), 
-      "latitude": Number(marker.lat), 
-      "title": marker.name, 
-      "description": marker.description
+      "longitude": Number(event.long), 
+      "latitude": Number(event.lat), 
+      "title": event.name, 
+      "description": event.description,
+      "date": event.date
       })
     })
     return (

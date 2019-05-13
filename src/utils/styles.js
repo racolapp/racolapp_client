@@ -70,7 +70,6 @@ const globalStyles = StyleSheet.create({
   },
   textInputLightRound: {
     borderRadius: 25,
-    // padding: 10,
     marginTop: 5,
     borderColor: styleMainColor,
     borderWidth: 2,

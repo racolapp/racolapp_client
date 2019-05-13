@@ -16,19 +16,29 @@ import {
 import { globalStyles, styleMainColor } from "../../utils/styles";
 import DatePicker from "react-native-datepicker";
 
-var items = [
+const res =
+  [
   {
-    id: 1,
-    name: 'JavaScript',
+      "ID": 1,
+      "name": "soirée",
+      "created_at": null,
+      "updated_at": null,
+      "EventID": null
   },
   {
-    id: 2,
-    name: 'Java',
+      "ID": 2,
+      "name": "ciné",
+      "created_at": null,
+      "updated_at": null,
+      "EventID": null
   },
   {
-    id: 3,
-    name: 'Ruby',
-  },
+      "ID": 3,
+      "name": "parc",
+      "created_at": null,
+      "updated_at": null,
+      "EventID": null
+    }
 ]
 
 export default class App extends Component {
@@ -47,52 +57,19 @@ export default class App extends Component {
       lat: "",
       date: "",
       capacity: "",
-      TypeEventsID: "1",
-      UserID: 1
+      typeEvent: "",
+      TypeEventsID: "",
+      fetchedData: false
     };
     this.resultToSearchLocation = [];
+    this._listTypesEvents = [];
   }
 
-  _searchLocation = async adress => {
-    const response = await fetch(
-      `https://api-adresse.data.gouv.fr/search/?q=${adress}`,
-      {
-        headers: {
-          "Content-Type": "application/json"
-        },
-        method: "GET"
-      }
-    );
+  componentDidMount = async() => {
+    await this._fetchAllTypesEvents()
+  }
 
-    const json = await response.json();
-
-    // HANDLE NO API RESPONSE
-    if (json.title == "Missing query" || json.features.length == 0) {
-      console.log("No API response")
-    }
-    else {
-      this.resultToSearchLocation = json.features;
-    }
-  };
-
-  _listResultLocation = () => {
-    try {
-      return this.resultToSearchLocation.map(item => {
-        return (
-          <Picker.Item
-            label={item.properties.label}
-            key={item.properties.id}
-            value={item.properties.label}
-            color = {styleMainColor}
-          />
-        );
-      });
-    } catch (err) {
-      console.log("Fetch api adress failed");
-      console.log(err.message);
-    }
-  };
-
+  // TODO: POST NEW EVENT
   _addEvent = async () => {
     const response = await fetch("https://racolapp.herokuapp.com/users", {
       headers: {
@@ -106,9 +83,100 @@ export default class App extends Component {
     // TODO
     // console.log("############# RESPONSE JSON ###############");
     // console.log(json);
+
+    // TODO: personnaliser l'alerte?
+    if (json.error) {
+      Alert.alert(
+        "Impossible d'ajouter m'évènement",
+        "Vérifiez les informations saisies",
+        [
+          {
+            text: "OK",
+            onPress: () => console.log("Add event error - OK pressed")
+          }
+        ]
+      );
+    }
+  };
+
+  _fetchAllTypesEvents = async () => {
+    const response = await fetch("https://racolapp.herokuapp.com/typeevents", {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "GET",
+    });
+    const json = await response.json();
+
+    if (json.error){
+      console.log("Fetch events types failed")
+      console.log(json.error)
+    }
+    else {
+      this._listTypesEvents = json.data
+      this.setState({fetchedData: true})
+    }
+  };
+
+  _fetchListLocations = async adress => {
+    const response = await fetch(
+      `https://api-adresse.data.gouv.fr/search/?q=${adress}`,
+      {
+        headers: {
+          "Content-Type": "application/json"
+        },
+        method: "GET"
+      }
+    );
+    const json = await response.json();
+
+    // HANDLE NO API RESPONSE
+    if (json.title == "Missing query" || json.features.length == 0) {
+      console.log("No API response")
+    }
+    else {
+      this.resultToSearchLocation = json.features;
+    }
+  };
+
+  _mapListResultLocation = () => {
+    try {
+      return this.resultToSearchLocation.map(item => {
+        return (
+          <Picker.Item
+            label={item.properties.label}
+            key={item.properties.id}
+            value={item.properties.label}
+            color={styleMainColor}
+          />
+        );
+      });
+    } catch (err) {
+      console.log("Fetch api adress failed");
+      console.log(err.message);
+    }
+  };
+
+  _mapListTypesEvents = () => {
+    try {
+      return this._listTypesEvents.map(item => {
+        return (
+          <Picker.Item
+            label={item.name}
+            key={item}
+            value={item.name}
+            color={styleMainColor}
+          />
+        );
+    });
+    } catch (err) {
+      console.log("Fetch api Type Event failed");
+      console.log(err.message);
+    }
   };
 
   _renderScrollView = () => (
+
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={{ backgroundColor: styleMainColor }}>
         <TextInput
@@ -187,7 +255,7 @@ export default class App extends Component {
               placeholderTextColor={styleMainColor}
               onChangeText={searchedLocation => {
                 this.setState({ searchedLocation });
-                this._searchLocation(this.state.searchedLocation);
+                this._fetchListLocations(this.state.searchedLocation);
               }}
               value={this.state.searchedLocation}
             />
@@ -196,7 +264,7 @@ export default class App extends Component {
             <Text style={[globalStyles.h3, globalStyles.h3Flex1]}>
               Puis choisi le bon lieu
             </Text>
-            <View style={{flex:1}}>
+            <View style={{ flex: 1 }}>
             <Picker
               selectedValue={this.state.location}
               onValueChange={(value, key) => {
@@ -207,14 +275,13 @@ export default class App extends Component {
                 });
               }}
             >
-              {this._listResultLocation()}
+              {this._mapListResultLocation()}
             </Picker>
             </View>
           </View>
         </View>
 
         <View style={{ borderWidth: 1, borderColor: styleMainColor }} />
-
 
         <View style={{ flex: 1, flexDirection: "row" }}>
           <Text style={[globalStyles.h3, globalStyles.h3Flex1]}>
@@ -235,7 +302,7 @@ export default class App extends Component {
           />
         </View>
 
-        <View style={{ flex: 1, flexDirection: "row" }}>
+        {/* <View style={{ flex: 1, flexDirection: "row" }}>
           <Text style={[globalStyles.h3, globalStyles.h3Flex1]}>
             Type d'évènement
           </Text>
@@ -249,6 +316,25 @@ export default class App extends Component {
             onChangeText={TypeEventsID => this.setState({ TypeEventsID })}
             value={this.state.TypeEventsID}
           />
+        </View> */}
+
+        <View style={{ flex: 1, flexDirection: "row" }}>
+          <Text style={[globalStyles.h3, globalStyles.h3Flex1]}>
+            Choisi le type de l'évènement
+            </Text>
+          <View style={{ flex: 1 }}>
+            <Picker
+              selectedValue={this.state.typeEvent}
+              onValueChange={(value, key) => {
+                this.setState({
+                  typeEvent: value,
+                  TypeEventsID: this._listTypesEvents[key].ID
+                });
+              }}
+            >
+              {this._mapListTypesEvents()}
+            </Picker>
+          </View>
         </View>
 
         <TouchableOpacity
@@ -260,13 +346,16 @@ export default class App extends Component {
           <Text style={globalStyles.buttonText}> VALIDE </Text>
         </TouchableOpacity>
       </View>
-      {/* {console.log(this.state)} */}
+      {console.log("this.state")}
+      {console.log(this.state)}
       {/* {console.log(this.resultToSearchLocation)} */}
     </ScrollView>
   );
 
   render() {
-    return <>{this._renderScrollView()}</>;
+    return <>
+    {this.state.fetchedData == true && this._renderScrollView()}
+    </>;
   }
 }
 

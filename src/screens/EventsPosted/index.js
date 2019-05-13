@@ -26,7 +26,7 @@ export default class EventsSubscriptedScreen extends Component {
 
     this.setState({ token: user.meta.token, userID: user.data.user.ID})
 
-    const response = await fetch('https://racolapp.herokuapp.com/events/userID', {
+    const response = await fetch(`https://racolapp.herokuapp.com/events/userID/${user.data.user.ID}`, {
       headers: {
         "Content-Type": "application/json",
         "authorization": user.meta.token
@@ -34,6 +34,8 @@ export default class EventsSubscriptedScreen extends Component {
       method: "GET",
       body: JSON.stringify(this.state)
     });
+
+    console.log('=======================================================')
 
     const json = await response.json();
 

@@ -80,6 +80,10 @@ export default class SingleEventDetailsScreen extends Component {
         <View style={{ flex: 2 }}>
           <Text style={globalStyles.h2}>DESCRIPTIF</Text>
         </View>
+
+{/* TODO: Intégrer le descriptif */}
+
+{/* TODO: FETCH POUR S'INSCRIRE */}
         <View style={{ flex: 1, width: "90%", }}>
           <TouchableOpacity style={globalStyles.button}>
             <Text style={globalStyles.buttonText}>S'INSCRIRE</Text>

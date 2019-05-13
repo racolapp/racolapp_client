@@ -157,7 +157,7 @@ export default class App extends Component {
     }
   };
 
-  _mapListTypesEvents = () => {
+  _mapListTypesEvents = () => { // TODO: Add a default item
     try {
       return this._listTypesEvents.map(item => {
         return (
@@ -301,22 +301,6 @@ export default class App extends Component {
             value={this.state.capacity}
           />
         </View>
-
-        {/* <View style={{ flex: 1, flexDirection: "row" }}>
-          <Text style={[globalStyles.h3, globalStyles.h3Flex1]}>
-            Type d'évènement
-          </Text>
-          <TextInput
-            style={[
-              globalStyles.textInputLightRectangular,
-              globalStyles.textInputLightRectangularFlex1
-            ]}
-            placeholder="A toi de nous dire"
-            placeholderTextColor={styleMainColor}
-            onChangeText={TypeEventsID => this.setState({ TypeEventsID })}
-            value={this.state.TypeEventsID}
-          />
-        </View> */}
 
         <View style={{ flex: 1, flexDirection: "row" }}>
           <Text style={[globalStyles.h3, globalStyles.h3Flex1]}>

@@ -28,6 +28,19 @@ export default class EventsSubscriptedScreen extends Component {
     this.events = jsonFetched; // TODO: temporaire à remplacer par this._events = [] quand api OK (passer par state ??)
   }
 
+  componentWillMount = async () => {
+    try {
+      let userConnected = await readStorage("user");
+      if (userConnected === undefined) {
+        this.props.navigation.navigate('SignIn');
+      } else {
+        this.setState({user: userConnected.data.user})
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   render() {
     return <EventList events={this.events}/>
   }

@@ -16,8 +16,6 @@ import {
 } from "../../utils/asyncStorage";
 import { globalStyles, styleMainColor } from "../../utils/styles";
 
-const urlLogin = "http://localhost:4242/api/auth/login";
-
 const userToSave = {
   ID: 1,
   pseudo: "User1",
@@ -41,28 +39,25 @@ export default class SignInScreen extends Component {
     this.state = {
       pseudo: "",
       password: ""
-      // errorOnLog: false
     };
   }
 
-  _login = async json => {
+  _login = async () => {
     // // TODO: fetch ..................
-    // const response = await fetch(urlLogin, {
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   },
-    //   method: "POST",
-    //   body: JSON.stringify(this.state)
-    // });
+    const response = await fetch('https://racolapp.herokuapp.com/auth/login', {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "POST",
+      body: JSON.stringify(this.state)
+    });
 
-    // const json = await response.json();
+    const json = await response.json();
 
-    // ERROR
-    // if (json.error) {
-    if (1 == 2) {
+    if (json.error) {
       Alert.alert(
         "Erreur d'authentification",
-        "Mot de passe ou identifiant incorrect",
+        json.error,
         [
           {
             text: "OK",
@@ -74,6 +69,15 @@ export default class SignInScreen extends Component {
     // I'M CONNECTED
     else {
       await setStorage("user", json);
+
+      let userConnected = await readStorage("user");
+
+      if (userConnected.meta.token != undefined) {
+        console.log("ok")
+        this.props.navigation.navigate('Profil');
+      } else {
+        console.log("No token")
+      }
       // TODO: supprimer (pour le test)
       // await readStorage("user");
       // await removeStorage("user");

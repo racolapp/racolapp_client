@@ -1,23 +1,8 @@
 import React, { Component } from "react";
 import EventList from "../../components/EventList";
 
-const jsonFetched = [
-  {
-    ID: 1,
-    name: "This is a title 1",
-    description: "This is a description"
-  },
-  {
-    ID: 2,
-    name: "This is a title 2",
-    description: "This is a description"
-  },
-  {
-    ID: 3,
-    name: "This is a title 3",
-    description: "This is a description"
-  }
-];
+import { readStorage } from "../../utils/asyncStorage";
+
 export default class EventsSubscriptedScreen extends Component {
   static navigationOptions = {
     title: "MES PUBLICATIONS"
@@ -25,10 +10,68 @@ export default class EventsSubscriptedScreen extends Component {
 
   constructor(props) {
     super(props);
-    this.events = jsonFetched; // TODO: temporaire à remplacer par this._events = [] quand api OK (passer par state ??)
+
+    this.state = {
+      token: "",
+      userID: ""
+    }
+    this.events = []; // TODO: temporaire à remplacer par this._events = [] quand api OK (passer par state ??)
+  }
+
+  
+
+  fetchData = async () => {
+    // // TODO: fetch ..................
+    let user = await readStorage("user")
+
+    this.setState({ token: user.meta.token, userID: user.data.user.ID})
+
+    const response = await fetch('https://racolapp.herokuapp.com/events/userID', {
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": user.meta.token
+      },
+      method: "GET",
+      body: JSON.stringify(this.state)
+    });
+
+    const json = await response.json();
+
+    if (json.error) {
+      Alert.alert(
+        "Erreur d'authentification",
+        json.error,
+        [
+          {
+            text: "OK",
+            onPress: () => console.log("Authentification error - OK pressed")
+          }
+        ]
+      );
+    }
+    // I'M CONNECTED
+    else {
+      console.log(json)
+      return json.data;
+    }
+  };
+
+  componentWillMount = async () => {
+    try {
+      let userConnected = await readStorage("user");
+      console.log(userConnected)
+      if (userConnected === undefined) {
+        this.props.navigation.navigate('SignIn');
+      } else {
+        this.setState({user: userConnected.data.user})
+      }
+    } catch (error) {
+      console.log('catch eventposted')
+      console.log(error)
+    }
   }
 
   render() {
-    return <EventList events={this.events}/>
+    return <EventList events={ () => { fetchData() }}/>
   }
 }

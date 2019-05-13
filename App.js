@@ -3,6 +3,7 @@ import HomeScreen from "./src/screens/Home";
 import MapScreen from "./src/screens/Map";
 import SignInScreen from "./src/screens/SignIn";
 import SignUpScreen from "./src/screens/SignUp";
+import ProfilScreen from "./src/screens/Profil";
 import EventsPostedScreen from "./src/screens/EventsPosted";
 import EventsSubscriptedScreen from "./src/screens/EventsSubscripted";
 import SingleEventDetailsScreen from "./src/screens/SingleEventDetails";
@@ -71,10 +72,11 @@ const eventsSubscriptedSingleStack = createStackNavigator(
 const authenticationStack = createStackNavigator(
   {
     SignIn: SignInScreen,
-    SignUp: SignUpScreen
+    SignUp: SignUpScreen,
+    Profil: ProfilScreen
   },
   {
-    initialRouteName: "SignIn",
+    initialRouteName: "Profil",
     defaultNavigationOptions: styleNavigationHeaderStyle
   }
 );

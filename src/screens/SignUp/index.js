@@ -38,47 +38,63 @@ export default class App extends Component {
   }
 
 
-_signUp = async () => {
-  const response = await fetch("https://racolapp.herokuapp.com/users", {
-  headers: {
-    "Content-Type": "application/json"
-  },
-  method: "POST",
-  body: JSON.stringify(this.state)
-});
+  _signUp = async () => {
+    const response = await fetch("https://racolapp.herokuapp.com/auth/register", {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "POST",
+      body: JSON.stringify(this.state)
+    });
 
-console.log("############# RESPONSE ###############");
-console.log(response);
+    console.log("############# RESPONSE ###############");
+    console.log(response);
 
-const json = await response.json();
+    const json = await response.json();
 
-console.log("############# RESPONSE JSON ###############");
-console.log(json);
-// I'M CONNECTED
-if (json.err) {
-  Alert.alert(
-    "Erreur d'authentification",
-    "Mot de passe ou identifiant incorrect",
-    [
-      {
-        text: "OK",
-        onPress: () => console.log("Authentification error - OK pressed")
+    console.log("############# RESPONSE JSON ###############");
+    console.log(json);
+    // I'M CONNECTED
+    if (json.err) {
+      Alert.alert(
+        "Erreur d'authentification",
+        "Mot de passe ou identifiant incorrect",
+        [
+          {
+            text: "OK",
+            onPress: () => console.log("Authentification error - OK pressed")
+          }
+        ]
+      );
+    }
+    else {
+
+      await setStorage("user", json);
+
+      let userConnected = await readStorage("user");
+
+      console.log("------------------ userConnected ------------------")
+      console.log(userConnected)
+
+      console.log("------------------ token ------------------")
+      console.log(userConnected.meta.token)
+
+      if (userConnected.meta.token != undefined) {
+        console.log("ok")
+        this.props.navigation.navigate('Profil');
+      } else {
+        console.log("No token")
       }
-    ]
-  );
-}
-else {
-  await setStorage("user", json);
 
-  // //////
-  // localStorage.setItem("token", json.meta.token);
-  // localStorage.setItem("uuid",json.data.user.uuid);
-  // localStorage.setItem("userNickname", json.data.user.nickname);
-  // localStorage.setItem("userEmail",json.data.user.email);
-  // this.props.connect(json.data.user);
-}
+      // //////
+      // localStorage.setItem("token", json.meta.token);
+      // localStorage.setItem("uuid",json.data.user.uuid);
+      // localStorage.setItem("userNickname", json.data.user.nickname);
+      // localStorage.setItem("userEmail",json.data.user.email);
+      // this.props.connect(json.data.user);
+    }
 
-};
+  };
 
   // _read = async () => {
   //   console.log("HELLO SIGN UP!");
@@ -166,8 +182,8 @@ else {
             this._signUp();
           }}
         >
-          <Text style={globalStyles.buttonText}> VALIDER </Text>
-        </TouchableOpacity> 
+          <Text style={globalStyles.buttonText} > VALIDER </Text>
+        </TouchableOpacity>
       </ScrollView>
     );
   }

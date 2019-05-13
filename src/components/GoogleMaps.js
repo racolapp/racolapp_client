@@ -34,7 +34,7 @@ class GoogleMaps extends Component {
 
           console.log("ok");
 
-          const metadata = `${marker.statusValue}`;
+          const metadata = `${marker.description}`;
 
           return (
             <MapView.Marker
@@ -46,6 +46,8 @@ class GoogleMaps extends Component {
                 this.props.navigation.navigate("SingleEventDetails", {
                   longitude: coords.longitude,
                   latitude: coords.latitude,
+                  description: metadata,
+                  date: marker.date,
                   marker : [marker]
                 })
               }

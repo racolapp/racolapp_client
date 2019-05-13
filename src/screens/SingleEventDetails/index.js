@@ -3,47 +3,7 @@ import { Text, View } from "react-native";
 import GoogleMaps from "../../components/GoogleMaps";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { globalStyles } from "../../utils/styles";
-
-// const data = [
-//   {
-//     "longitude": 2.5,
-//     "latitude": 48.8534,
-//     "title": "EventA",
-//     "statusValue": "ready"
-//   },
-//   // {
-//   //   "longitude": 2.3488,
-//   //   "latitude": 48.8,
-//   //   "title": "EventB",
-//   //   "statusValue": "ready"
-//   // },
-//   // {
-//   //   "longitude": 2.8,
-//   //   "latitude": 48.9,
-//   //   "title": "EventC",
-//   //   "statusValue": "ready"
-//   // },
-//   // {
-//   //   "longitude": 2.7,
-//   //   "latitude": 48.8,
-//   //   "title": "EventD",
-//   //   "statusValue": "ready"
-//   // },
-//   // {
-//   //   "longitude": 2.3488,
-//   //   "latitude": 48.8534,
-//   //   "title": "EventE",
-//   //   "statusValue": "ready"
-//   // },
-//   // {
-//   //   "longitude": 2.3,
-//   //   "latitude": 48.9,
-//   //   "title": "EventF",
-//   //   "statusValue": "ready"
-//   // }, 
-// ]
-// const jsonRender = data
-
+import moment from "moment";
 
 export default class SingleEventDetailsScreen extends Component {
   static navigationOptions = {
@@ -65,6 +25,7 @@ export default class SingleEventDetailsScreen extends Component {
   };
 
   render() {
+    const { marker, description, date } = this.props.navigation.state.params
     return (
       <View
         style={{
@@ -75,16 +36,19 @@ export default class SingleEventDetailsScreen extends Component {
         }}
       >
         <View style={{ flex: 3, width: "100%" }}>
-          <GoogleMaps region={this._setRegion()} markers={this.props.navigation.state.params.marker} />
+          <GoogleMaps
+            region={this._setRegion()}
+            markers={marker}
+          />
         </View>
         <View style={{ flex: 2 }}>
           <Text style={globalStyles.h2}>DESCRIPTIF</Text>
+          <Text style={globalStyles.h3Center}>{description}</Text>
+          {date !== null && <Text style={globalStyles.h3Center}>Le {moment(date).format("LL")} à {moment(date).format("LT")}</Text>}
         </View>
 
-{/* TODO: Intégrer le descriptif */}
-
-{/* TODO: FETCH POUR S'INSCRIRE */}
-        <View style={{ flex: 1, width: "90%", }}>
+        {/* TODO: FETCH POUR S'INSCRIRE */}
+        <View style={{ flex: 1, width: "90%" }}>
           <TouchableOpacity style={globalStyles.button}>
             <Text style={globalStyles.buttonText}>S'INSCRIRE</Text>
           </TouchableOpacity>

@@ -79,7 +79,7 @@ class HomeScreen extends Component {
     );
   };
 
-  // TODO
+  // TODO? ajouter token si route doit être secure
   _loadEvents = async () => {
     const response = await fetch("https://racolapp.herokuapp.com/events/", {
       headers: {
@@ -126,7 +126,7 @@ class HomeScreen extends Component {
         data={this.props.events}
         keyExtractor={singleEvent => singleEvent.ID.toString()}
         renderItem={({ item }) => {
-          const { ID, long, lat, name, description } = item;
+          const { ID, long, lat, name, description, date } = item;
           return (
             <TouchableOpacity
               onPress={() =>
@@ -134,11 +134,13 @@ class HomeScreen extends Component {
                   id:ID,
                   longitude:Number(long),
                   latitude:Number(lat),
+                  description,
+                  date, 
                   marker: [{
                     "longitude": Number(long), 
                     "latitude": Number(lat), 
                     "title": name, 
-                    "statusValue": description
+                    "description": description
                   }]
                 })
               }

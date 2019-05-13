@@ -15,7 +15,6 @@ import {
 } from "../../utils/asyncStorage";
 import { globalStyles, styleMainColor } from "../../utils/styles";
 import DatePicker from "react-native-datepicker";
-import SearchableDropdown from 'react-native-searchable-dropdown';
 
 var items = [
   {
@@ -41,8 +40,8 @@ export default class App extends Component {
     super(props);
     this.state = {
       searchedLocation: "",
-      name: "Partie de billard",
-      description: "Pour retrouver des amateurs de billard et de bonnes bières",
+      name: "",
+      description: "",
       location: "",
       long: "",
       lat: "",
@@ -66,30 +65,13 @@ export default class App extends Component {
     );
 
     const json = await response.json();
-    this.resultToSearchLocation = json.features;
 
-    // const json = await response.json();
-    // this._listSearchLocation(json.features)
-  };
-
-  _listSearchLocation = (list) => {
-    this.resultToSearchLocation = []
-    try {
-      const res = [];
-      list.map(item => {
-        res.push({
-          id: item.properties.id,
-          name: item.properties.label,
-        })
-      });
-      return this.resultToSearchLocation = res;
-    } catch (err) {
-      console.log("Fetch api adress failed");
-      console.log(err.message);
+    // HANDLE NO API RESPONSE
+    if (json.title == "Missing query" || json.features.length == 0) {
+      console.log("No API response")
     }
-    finally {
-      console.log("FINALLY")
-      console.log(this.resultToSearchLocation)
+    else {
+      this.resultToSearchLocation = json.features;
     }
   };
 
@@ -100,11 +82,8 @@ export default class App extends Component {
           <Picker.Item
             label={item.properties.label}
             key={item.properties.id}
-            value={{
-              label: item.properties.label,
-              long: item.geometry.coordinates[0],
-              lat: item.geometry.coordinates[1]
-            }}
+            value={item.properties.label}
+            color = {styleMainColor}
           />
         );
       });
@@ -123,6 +102,8 @@ export default class App extends Component {
       body: JSON.stringify(this.state)
     });
     const json = await response.json();
+
+    // TODO
     // console.log("############# RESPONSE JSON ###############");
     // console.log(json);
   };
@@ -138,7 +119,7 @@ export default class App extends Component {
             fontStyle: "italic",
             textAlign: "center"
           }}
-          placeholder="Renseigne ici ton titre!"
+          placeholder="Renseigne ICI ton titre!"
           placeholderTextColor="white"
           onChangeText={name => this.setState({ name })}
           value={this.state.name}
@@ -148,86 +129,12 @@ export default class App extends Component {
       <View style={{ marginTop: 10, marginLeft: 20, marginRight: 20 }}>
         <TextInput
           style={globalStyles.h2}
-          placeholder="Décris-nous ton évènement en quelques lignes"
+          placeholder="Décris-nous ICI ton évènement en quelques lignes"
           placeholderTextColor={styleMainColor}
           multiline={true}
           onChangeText={description => this.setState({ description })}
           value={this.state.description}
         />
-
-        <View style={{ flex: 1, flexDirection: "row" }}>
-          <Text style={[globalStyles.h3, globalStyles.h3Flex1]}>
-            Lieu de l'évènement
-          </Text>
-          <TextInput
-            style={[
-              globalStyles.textInputLightRectangular,
-              globalStyles.textInputLightRectangularFlex1
-            ]}
-            placeholder="A toi de nous dire"
-            placeholderTextColor={styleMainColor}
-            onChangeText={searchedLocation => {
-              this.setState({ searchedLocation });
-              this._searchLocation(this.state.searchedLocation);
-            }}
-            value={this.state.searchedLocation}
-          />
-        </View>
-        <View>
-          <Picker
-            // selectedValue={this.state.location}
-            onValueChange={value => {
-              this.setState({
-                location: value.label,
-                long: value.long,
-                lat: value.lat
-              });
-            }}
-          >
-            {this._listResultLocation()}
-          </Picker>
-          {console.log(this.state)}
-        </View>
-
-        {/* <View>
-          <SearchableDropdown
-            onTextChange={searchedLocation => {
-              this.setState({ searchedLocation });
-              this._searchLocation(this.state.searchedLocation);
-              // this._listSearchLocation()
-            }}
-            onItemSelect={item => alert(JSON.stringify(item))}
-            // onItemSelect={item => {
-            //   console.log("ITEM")
-            //   console.log(item)
-            //   this.setState({location: item.name})}
-            // }
-            TextInput = {this.location}
-            containerStyle={{ padding: 5 }}
-            textInputStyle={{
-              padding: 12,
-              borderWidth: 1,
-              borderColor: '#ccc',
-              borderRadius: 5,
-            }}
-            itemStyle={{
-              padding: 10,
-              marginTop: 2,
-              backgroundColor: '#ddd',
-              borderColor: '#bbb',
-              borderWidth: 1,
-              borderRadius: 5,
-            }}
-            itemTextStyle={{ color: '#222' }}
-            itemsContainerStyle={{ maxHeight: 140 }}
-            // items={items}
-            items={this.resultToSearchLocation}
-            defaultIndex={2}
-            placeholder="placeholder"
-            resetValue={false}
-            underlineColorAndroid="transparent"
-          />
-        </View> */}
 
         <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
           <Text style={[globalStyles.h3, globalStyles.h3Flex1]}>
@@ -259,18 +166,55 @@ export default class App extends Component {
               this.setState({ date: date });
             }}
           />
-
-          {/* <TextInput
-            style={[
-              globalStyles.textInputLightRectangular,
-              globalStyles.textInputLightRectangularFlex1
-            ]}
-            placeholder="A toi de nous dire"
-            placeholderTextColor={styleMainColor}
-            onChangeText={date => this.setState({ date })}
-            value={this.state.date}
-          /> */}
         </View>
+
+        <View style={{ borderWidth: 1, borderColor: styleMainColor }} />
+
+        <View>
+          <Text style={[globalStyles.h2]}>
+            Lieu de l'évènement
+          </Text>
+          <View style={{ flex: 1, flexDirection: "row" }}>
+            <Text style={[globalStyles.h3, globalStyles.h3Flex1]}>
+              Renseignes ici les 1ères lettres
+            </Text>
+            <TextInput
+              style={[
+                globalStyles.textInputLightRectangular,
+                globalStyles.textInputLightRectangularFlex1
+              ]}
+              placeholder="A toi de nous dire"
+              placeholderTextColor={styleMainColor}
+              onChangeText={searchedLocation => {
+                this.setState({ searchedLocation });
+                this._searchLocation(this.state.searchedLocation);
+              }}
+              value={this.state.searchedLocation}
+            />
+          </View>
+          <View style={{ flex: 1, flexDirection: "row" }}>
+            <Text style={[globalStyles.h3, globalStyles.h3Flex1]}>
+              Puis choisi le bon lieu
+            </Text>
+            <View style={{flex:1}}>
+            <Picker
+              selectedValue={this.state.location}
+              onValueChange={(value, key) => {
+                this.setState({
+                  location: value,
+                  long: this.resultToSearchLocation[key].geometry.coordinates[0],
+                  lat: this.resultToSearchLocation[key].geometry.coordinates[1],
+                });
+              }}
+            >
+              {this._listResultLocation()}
+            </Picker>
+            </View>
+          </View>
+        </View>
+
+        <View style={{ borderWidth: 1, borderColor: styleMainColor }} />
+
 
         <View style={{ flex: 1, flexDirection: "row" }}>
           <Text style={[globalStyles.h3, globalStyles.h3Flex1]}>

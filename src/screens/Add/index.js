@@ -49,8 +49,29 @@ export default class App extends Component {
         method: "GET"
       }
     );
+
     const json = await response.json();
-    this.resultToSearchLocation = json.features;
+this.resultToSearchLocation = json.features;
+
+    // const json = await response.json();
+    // this._listSearchLocation(json.features)
+  };
+
+  _listSearchLocation = (list) => {
+    this.resultToSearchLocation = []
+    try {
+      return list.map(item => {
+        // console.log("MAPPPPPPPPPPPPP")
+        // console.log(item.properties.label)
+        return this.resultToSearchLocation.push(item.properties.label)
+      });
+    } catch (err) {
+      console.log("Fetch api adress failed");
+      console.log(err.message);
+    }
+    finally{
+    console.log(this.resultToSearchLocation)
+    }
   };
 
   _listResultLocation = () => {
@@ -83,8 +104,8 @@ export default class App extends Component {
       body: JSON.stringify(this.state)
     });
     const json = await response.json();
-    console.log("############# RESPONSE JSON ###############");
-    console.log(json);
+    // console.log("############# RESPONSE JSON ###############");
+    // console.log(json);
   };
 
   _renderScrollView = () => (
@@ -149,12 +170,13 @@ export default class App extends Component {
           {console.log(this.state)}
         </View>
 
-        <View>
+        {/* <View>
         <SearchableDropdown
         // onTextChange={text => alert(text)}
         onTextChange={searchedLocation => {
           this.setState({ searchedLocation });
           this._searchLocation(this.state.searchedLocation);
+          // this._listSearchLocation()
         }}
         // onItemSelect={item => alert(JSON.stringify(item))}
         containerStyle={{ padding: 5 }}
@@ -180,7 +202,7 @@ export default class App extends Component {
         resetValue={false}
         underlineColorAndroid="transparent"
       />
-        </View>
+        </View> */}
 
         <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
           <Text style={[globalStyles.h3, globalStyles.h3Flex1]}>
@@ -242,7 +264,8 @@ export default class App extends Component {
             }
             value={this.state.capacity}
           />
-          {console.log(this.state)}
+          {/* {console.log(this.state)} */}
+          {/* {console.log(this.resultToSearchLocation)} */}
         </View>
 
         <View style={{ flex: 1, flexDirection: "row" }}>

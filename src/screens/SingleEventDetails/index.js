@@ -65,10 +65,6 @@ export default class SingleEventDetailsScreen extends Component {
   };
 
   render() {
-    console.log("PROPS NAVIGATION")
-    console.log(JSON.stringify(this.props.navigation.state.params.marker))
-    let marker = [];
-    marker.push(this.props.navigation.state.params.marker)
     return (
       <View
         style={{
@@ -79,7 +75,6 @@ export default class SingleEventDetailsScreen extends Component {
         }}
       >
         <View style={{ flex: 3, width: "100%" }}>
-          {/* <GoogleMaps region={this._setRegion()} markers={jsonRender} /> */}
           <GoogleMaps region={this._setRegion()} markers={this.props.navigation.state.params.marker} />
         </View>
         <View style={{ flex: 2 }}>

@@ -131,6 +131,12 @@ class HomeScreen extends Component {
                   id:ID,
                   longitude:Number(long),
                   latitude:Number(lat),
+                  marker: [{
+                    "longitude": Number(long), 
+                    "latitude": Number(lat), 
+                    "title": name, 
+                    "statusValue": description
+                  }]
                 })
               }
             >

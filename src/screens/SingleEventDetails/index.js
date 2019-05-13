@@ -4,6 +4,47 @@ import GoogleMaps from "../../components/GoogleMaps";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { globalStyles } from "../../utils/styles";
 
+const data = [
+  {
+    "longitude": 2.5,
+    "latitude": 48.8534,
+    "title": "EventA",
+    "statusValue": "ready"
+  },
+  // {
+  //   "longitude": 2.3488,
+  //   "latitude": 48.8,
+  //   "title": "EventB",
+  //   "statusValue": "ready"
+  // },
+  // {
+  //   "longitude": 2.8,
+  //   "latitude": 48.9,
+  //   "title": "EventC",
+  //   "statusValue": "ready"
+  // },
+  // {
+  //   "longitude": 2.7,
+  //   "latitude": 48.8,
+  //   "title": "EventD",
+  //   "statusValue": "ready"
+  // },
+  // {
+  //   "longitude": 2.3488,
+  //   "latitude": 48.8534,
+  //   "title": "EventE",
+  //   "statusValue": "ready"
+  // },
+  // {
+  //   "longitude": 2.3,
+  //   "latitude": 48.9,
+  //   "title": "EventF",
+  //   "statusValue": "ready"
+  // }, 
+]
+const jsonRender = data
+
+
 export default class SingleEventDetailsScreen extends Component {
   static navigationOptions = {
     title: "EVENEMENT"
@@ -24,6 +65,10 @@ export default class SingleEventDetailsScreen extends Component {
   };
 
   render() {
+    console.log("PROPS NAVIGATION")
+    console.log(JSON.stringify(this.props.navigation.state.params.marker))
+    let marker = [];
+    marker.push(this.props.navigation.state.params.marker)
     return (
       <View
         style={{
@@ -34,7 +79,8 @@ export default class SingleEventDetailsScreen extends Component {
         }}
       >
         <View style={{ flex: 3, width: "100%" }}>
-          <GoogleMaps region={this._setRegion()} />
+          {/* <GoogleMaps region={this._setRegion()} markers={jsonRender} /> */}
+          <GoogleMaps region={this._setRegion()} markers={this.props.navigation.state.params.marker} />
         </View>
         <View style={{ flex: 2 }}>
           <Text style={globalStyles.h2}>DESCRIPTIF</Text>

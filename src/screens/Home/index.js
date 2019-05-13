@@ -13,31 +13,6 @@ import { globalStyles, styleMainColor } from "../../utils/styles";
 import { requestLocationPermission } from "../../utils/PermissionsAndroid";
 import { connect } from "react-redux";
 
-
-const jsonFetched = [
-  {
-    ID: 1,
-    long: "2.3488",
-    lat: "48.8534",
-    name: "This is a title 1",
-    description: "This is a description"
-  },
-  {
-    ID: 2,
-    long: "2",
-    lat: "48",
-    name: "This is a title 2",
-    description: "This is a very very very very very very very very very very very very very very long description"
-  },
-  {
-    ID: 3,
-    long: "2.5",
-    lat: "49",
-    name: "This is a title 3",
-    description: "This is a description"
-  }
-];
-
 class HomeScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -59,10 +34,6 @@ class HomeScreen extends Component {
 
   constructor(props) {
     super(props);
-    // TODO: temporaire à remplacer par this._events = [] quand api OK
-    // this.state = {
-    //   _events: jsonFetched,
-    //  }
     this.state = {
       _events: [],
      }
@@ -123,13 +94,9 @@ class HomeScreen extends Component {
     }
     else {
       const json = await response.json();
-      console.log("response")
-      console.log(json)
       this.setState({
         _events: json.data,
       })
-      console.log("EVENTS STATE")
-      console.log(this.state._events)
       if (this.state._events == []){
         Alert.alert(
           "Aucun évènement dans vos environs",

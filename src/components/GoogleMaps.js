@@ -5,8 +5,10 @@ import {
 } from "react-native";
 import PropTypes from "prop-types";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import { withNavigation } from 'react-navigation';
 
-export default class GoogleMaps extends Component {
+
+class GoogleMaps extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -40,8 +42,14 @@ export default class GoogleMaps extends Component {
               coordinate={coords}
               title={marker.title}
               description={metadata}
-              onPress={() => { console.log('coucou') }}
-              onCalloutPress={() => { this.props.navigation.navigate('Home') }}
+              onCalloutPress={() =>
+                this.props.navigation.navigate("SingleEventDetails", {
+                  longitude: coords.longitude,
+                  latitude: coords.latitude,
+                  marker : [marker]
+                })
+              }
+
             />
           );
         })}
@@ -50,6 +58,8 @@ export default class GoogleMaps extends Component {
     );
   }
 }
+
+export default withNavigation(GoogleMaps);
 
 const styles = StyleSheet.create({
   mapView: {

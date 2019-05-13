@@ -99,9 +99,24 @@ class MapScreen extends Component {
   };
 
   render() {
+    console.log("EVENTSSSSSS")
+    console.log(this.props.events)
+    let markers = [];
+     this.props.events.map( marker => {
+      markers.push({
+      "longitude": Number(marker.long), 
+      "latitude": Number(marker.lat), 
+      "title": marker.name, 
+      "statusValue": marker.description
+      })
+    })
+    console.log("MARKERS")
+    console.log(markers)
     return (
       <View style={styles.overallViewContainer}>
-        <GoogleMaps region={this._setRegion()} markers={jsonRender} />
+        <GoogleMaps region={this._setRegion()} markers={markers} />
+        {/* <GoogleMaps region={this._setRegion()} markers={jsonRender} /> */}
+        {/* <GoogleMaps region={this._setRegion()} markers={this.props.navigation.state.params.marker} /> */}
         <View style={{ height: "10%" }}>
           <View
             style={{
@@ -128,7 +143,10 @@ class MapScreen extends Component {
 }
 
 const mapStateToProps = state => {
-  return { location: state.location };
+  return { 
+    location: state.location,
+    events: state.events
+  };
 };
 export default connect(mapStateToProps)(MapScreen);
 

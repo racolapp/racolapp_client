@@ -13,6 +13,20 @@ import { globalStyles, styleMainColor } from "../../utils/styles";
 import { requestLocationPermission } from "../../utils/PermissionsAndroid";
 import { connect } from "react-redux";
 
+// onPress={() =>
+//   this.props.navigation.navigate("SingleEventDetails", {
+//     id:ID,
+//     longitude:Number(long),
+//     latitude:Number(lat),
+//     marker: [{
+//       "longitude": Number(long), 
+//       "latitude": Number(lat), 
+//       "title": name, 
+//       "statusValue": description
+//     }]
+//   })
+
+
 class HomeScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -94,10 +108,17 @@ class HomeScreen extends Component {
     }
     else {
       const json = await response.json();
-      this.setState({
-        _events: json.data,
-      })
-      if (this.state._events == []){
+      const action = {
+        type: "GET_ALL_EVENTS",
+        value: json.data
+      };
+      this.props.dispatch(action);
+
+      // this.setState({
+      //   _events: json.data,
+      // })
+      // if (this.state._events == []){
+      if (this.props.events == []){
         Alert.alert(
           "Aucun évènement dans vos environs",
           "Regardez dans une autre zone",
@@ -120,7 +141,7 @@ class HomeScreen extends Component {
         columnWrapperStyle={styles.row}
         horizontal={false}
         showsVerticalScrollIndicator={false}
-        data={this.state._events}
+        data={this.props.events}
         keyExtractor={singleEvent => singleEvent.ID.toString()}
         renderItem={({ item }) => {
           const { ID, long, lat, name, description } = item;
@@ -162,7 +183,10 @@ class HomeScreen extends Component {
 }
 
 const mapStateToProps = state => {
-  return { location: state.location };
+  return { 
+    location: state.location,
+    events: state.events
+  };
 };
 export default connect(mapStateToProps)(HomeScreen);
 

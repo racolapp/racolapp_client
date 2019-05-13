@@ -4,45 +4,45 @@ import GoogleMaps from "../../components/GoogleMaps";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { globalStyles } from "../../utils/styles";
 
-const data = [
-  {
-    "longitude": 2.5,
-    "latitude": 48.8534,
-    "title": "EventA",
-    "statusValue": "ready"
-  },
-  // {
-  //   "longitude": 2.3488,
-  //   "latitude": 48.8,
-  //   "title": "EventB",
-  //   "statusValue": "ready"
-  // },
-  // {
-  //   "longitude": 2.8,
-  //   "latitude": 48.9,
-  //   "title": "EventC",
-  //   "statusValue": "ready"
-  // },
-  // {
-  //   "longitude": 2.7,
-  //   "latitude": 48.8,
-  //   "title": "EventD",
-  //   "statusValue": "ready"
-  // },
-  // {
-  //   "longitude": 2.3488,
-  //   "latitude": 48.8534,
-  //   "title": "EventE",
-  //   "statusValue": "ready"
-  // },
-  // {
-  //   "longitude": 2.3,
-  //   "latitude": 48.9,
-  //   "title": "EventF",
-  //   "statusValue": "ready"
-  // }, 
-]
-const jsonRender = data
+// const data = [
+//   {
+//     "longitude": 2.5,
+//     "latitude": 48.8534,
+//     "title": "EventA",
+//     "statusValue": "ready"
+//   },
+//   // {
+//   //   "longitude": 2.3488,
+//   //   "latitude": 48.8,
+//   //   "title": "EventB",
+//   //   "statusValue": "ready"
+//   // },
+//   // {
+//   //   "longitude": 2.8,
+//   //   "latitude": 48.9,
+//   //   "title": "EventC",
+//   //   "statusValue": "ready"
+//   // },
+//   // {
+//   //   "longitude": 2.7,
+//   //   "latitude": 48.8,
+//   //   "title": "EventD",
+//   //   "statusValue": "ready"
+//   // },
+//   // {
+//   //   "longitude": 2.3488,
+//   //   "latitude": 48.8534,
+//   //   "title": "EventE",
+//   //   "statusValue": "ready"
+//   // },
+//   // {
+//   //   "longitude": 2.3,
+//   //   "latitude": 48.9,
+//   //   "title": "EventF",
+//   //   "statusValue": "ready"
+//   // }, 
+// ]
+// const jsonRender = data
 
 
 export default class SingleEventDetailsScreen extends Component {

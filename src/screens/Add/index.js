@@ -50,11 +50,11 @@ export default class App extends Component {
       }
     );
 
-    const json = await response.json();
-this.resultToSearchLocation = json.features;
+//     const json = await response.json();
+// this.resultToSearchLocation = json.features;
 
-    // const json = await response.json();
-    // this._listSearchLocation(json.features)
+    const json = await response.json();
+    this._listSearchLocation(json.features)
   };
 
   _listSearchLocation = (list) => {
@@ -154,7 +154,7 @@ this.resultToSearchLocation = json.features;
             value={this.state.searchedLocation}
           />
         </View>
-        <View>
+        {/* <View>
           <Picker
             // selectedValue={this.state.location}
             onValueChange={value => {
@@ -168,9 +168,9 @@ this.resultToSearchLocation = json.features;
             {this._listResultLocation()}
           </Picker>
           {console.log(this.state)}
-        </View>
+        </View> */}
 
-        {/* <View>
+        <View>
         <SearchableDropdown
         // onTextChange={text => alert(text)}
         onTextChange={searchedLocation => {
@@ -202,7 +202,7 @@ this.resultToSearchLocation = json.features;
         resetValue={false}
         underlineColorAndroid="transparent"
       />
-        </View> */}
+        </View>
 
         <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
           <Text style={[globalStyles.h3, globalStyles.h3Flex1]}>

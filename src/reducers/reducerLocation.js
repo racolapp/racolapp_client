@@ -1,5 +1,6 @@
 const initialState = {
-    location : {}
+    location : {},
+    events : []
   };
   
  const reducer = (state = initialState, action) => {
@@ -8,6 +9,12 @@ const initialState = {
         return {
           ...state,
           location: action.value
+        };
+      }
+      case 'GET_ALL_EVENTS': {
+        return {
+          ...state,
+          events: action.value
         };
       }
       default: return state

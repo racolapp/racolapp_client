@@ -9,46 +9,6 @@ import GoogleMaps from "../../components/GoogleMaps";
 import GoogleAutocomplete from "../../components/GoogleAutocomplete";
 import { connect } from "react-redux";
 
-const data = [
-  {
-    "longitude": 2.5,
-    "latitude": 48.8534,
-    "title": "EventA",
-    "statusValue": "ready"
-  },
-  {
-    "longitude": 2.3488,
-    "latitude": 48.8,
-    "title": "EventB",
-    "statusValue": "ready"
-  },
-  {
-    "longitude": 2.8,
-    "latitude": 48.9,
-    "title": "EventC",
-    "statusValue": "ready"
-  },
-  {
-    "longitude": 2.7,
-    "latitude": 48.8,
-    "title": "EventD",
-    "statusValue": "ready"
-  },
-  {
-    "longitude": 2.3488,
-    "latitude": 48.8534,
-    "title": "EventE",
-    "statusValue": "ready"
-  },
-  {
-    "longitude": 2.3,
-    "latitude": 48.9,
-    "title": "EventF",
-    "statusValue": "ready"
-  }, 
-]
-const jsonRender = data
-
 class MapScreen extends Component {
   constructor(props) {
     super(props);
@@ -78,7 +38,6 @@ class MapScreen extends Component {
     return { latitude, longitude, latitudeDelta, longitudeDelta };
   };
 
-
   _setLocation = () => {
     navigator.geolocation.getCurrentPosition(
       position => {
@@ -99,9 +58,18 @@ class MapScreen extends Component {
   };
 
   render() {
+    let markers = [];
+     this.props.events.map( marker => {
+      markers.push({
+      "longitude": Number(marker.long), 
+      "latitude": Number(marker.lat), 
+      "title": marker.name, 
+      "statusValue": marker.description
+      })
+    })
     return (
       <View style={styles.overallViewContainer}>
-        <GoogleMaps region={this._setRegion()} markers={jsonRender} />
+        <GoogleMaps region={this._setRegion()} markers={markers} />
         <View style={{ height: "10%" }}>
           <View
             style={{
@@ -128,7 +96,10 @@ class MapScreen extends Component {
 }
 
 const mapStateToProps = state => {
-  return { location: state.location };
+  return { 
+    location: state.location,
+    events: state.events
+  };
 };
 export default connect(mapStateToProps)(MapScreen);
 

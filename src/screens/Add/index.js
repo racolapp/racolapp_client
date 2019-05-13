@@ -17,6 +17,21 @@ import { globalStyles, styleMainColor } from "../../utils/styles";
 import DatePicker from "react-native-datepicker";
 import SearchableDropdown from 'react-native-searchable-dropdown';
 
+var items = [
+  {
+    id: 1,
+    name: 'JavaScript',
+  },
+  {
+    id: 2,
+    name: 'Java',
+  },
+  {
+    id: 3,
+    name: 'Ruby',
+  },
+]
+
 export default class App extends Component {
   static navigationOptions = {
     title: "NOUVEL EVENEMENT"
@@ -50,27 +65,31 @@ export default class App extends Component {
       }
     );
 
-//     const json = await response.json();
-// this.resultToSearchLocation = json.features;
-
     const json = await response.json();
-    this._listSearchLocation(json.features)
+    this.resultToSearchLocation = json.features;
+
+    // const json = await response.json();
+    // this._listSearchLocation(json.features)
   };
 
   _listSearchLocation = (list) => {
     this.resultToSearchLocation = []
     try {
-      return list.map(item => {
-        // console.log("MAPPPPPPPPPPPPP")
-        // console.log(item.properties.label)
-        return this.resultToSearchLocation.push(item.properties.label)
+      const res = [];
+      list.map(item => {
+        res.push({
+          id: item.properties.id,
+          name: item.properties.label,
+        })
       });
+      return this.resultToSearchLocation = res;
     } catch (err) {
       console.log("Fetch api adress failed");
       console.log(err.message);
     }
-    finally{
-    console.log(this.resultToSearchLocation)
+    finally {
+      console.log("FINALLY")
+      console.log(this.resultToSearchLocation)
     }
   };
 
@@ -154,7 +173,7 @@ export default class App extends Component {
             value={this.state.searchedLocation}
           />
         </View>
-        {/* <View>
+        <View>
           <Picker
             // selectedValue={this.state.location}
             onValueChange={value => {
@@ -168,41 +187,47 @@ export default class App extends Component {
             {this._listResultLocation()}
           </Picker>
           {console.log(this.state)}
-        </View> */}
-
-        <View>
-        <SearchableDropdown
-        // onTextChange={text => alert(text)}
-        onTextChange={searchedLocation => {
-          this.setState({ searchedLocation });
-          this._searchLocation(this.state.searchedLocation);
-          // this._listSearchLocation()
-        }}
-        // onItemSelect={item => alert(JSON.stringify(item))}
-        containerStyle={{ padding: 5 }}
-        textInputStyle={{
-          padding: 12,
-          borderWidth: 1,
-          borderColor: '#ccc',
-          borderRadius: 5,
-        }}
-        itemStyle={{
-          padding: 10,
-          marginTop: 2,
-          backgroundColor: '#ddd',
-          borderColor: '#bbb',
-          borderWidth: 1,
-          borderRadius: 5,
-        }}
-        itemTextStyle={{ color: '#222' }}
-        itemsContainerStyle={{ maxHeight: 140 }}
-        items={this.resultToSearchLocation}
-        defaultIndex={2}
-        placeholder="placeholder"
-        resetValue={false}
-        underlineColorAndroid="transparent"
-      />
         </View>
+
+        {/* <View>
+          <SearchableDropdown
+            onTextChange={searchedLocation => {
+              this.setState({ searchedLocation });
+              this._searchLocation(this.state.searchedLocation);
+              // this._listSearchLocation()
+            }}
+            onItemSelect={item => alert(JSON.stringify(item))}
+            // onItemSelect={item => {
+            //   console.log("ITEM")
+            //   console.log(item)
+            //   this.setState({location: item.name})}
+            // }
+            TextInput = {this.location}
+            containerStyle={{ padding: 5 }}
+            textInputStyle={{
+              padding: 12,
+              borderWidth: 1,
+              borderColor: '#ccc',
+              borderRadius: 5,
+            }}
+            itemStyle={{
+              padding: 10,
+              marginTop: 2,
+              backgroundColor: '#ddd',
+              borderColor: '#bbb',
+              borderWidth: 1,
+              borderRadius: 5,
+            }}
+            itemTextStyle={{ color: '#222' }}
+            itemsContainerStyle={{ maxHeight: 140 }}
+            // items={items}
+            items={this.resultToSearchLocation}
+            defaultIndex={2}
+            placeholder="placeholder"
+            resetValue={false}
+            underlineColorAndroid="transparent"
+          />
+        </View> */}
 
         <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
           <Text style={[globalStyles.h3, globalStyles.h3Flex1]}>
@@ -214,7 +239,7 @@ export default class App extends Component {
             mode="datetime"
             placeholder="Sélectionne le jour et l'heure"
             format=""
-            minDate={Date.now()}
+            // minDate={Date.now()} // not compatible?
             confirmBtnText="OK"
             cancelBtnText="Annuler"
             is24Hour={true}
@@ -264,8 +289,6 @@ export default class App extends Component {
             }
             value={this.state.capacity}
           />
-          {/* {console.log(this.state)} */}
-          {/* {console.log(this.resultToSearchLocation)} */}
         </View>
 
         <View style={{ flex: 1, flexDirection: "row" }}>
@@ -293,6 +316,8 @@ export default class App extends Component {
           <Text style={globalStyles.buttonText}> VALIDE </Text>
         </TouchableOpacity>
       </View>
+      {/* {console.log(this.state)} */}
+      {/* {console.log(this.resultToSearchLocation)} */}
     </ScrollView>
   );
 

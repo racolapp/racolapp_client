@@ -9,46 +9,6 @@ import GoogleMaps from "../../components/GoogleMaps";
 import GoogleAutocomplete from "../../components/GoogleAutocomplete";
 import { connect } from "react-redux";
 
-const data = [
-  {
-    "longitude": 2.5,
-    "latitude": 48.8534,
-    "title": "EventA",
-    "statusValue": "ready"
-  },
-  {
-    "longitude": 2.3488,
-    "latitude": 48.8,
-    "title": "EventB",
-    "statusValue": "ready"
-  },
-  {
-    "longitude": 2.8,
-    "latitude": 48.9,
-    "title": "EventC",
-    "statusValue": "ready"
-  },
-  {
-    "longitude": 2.7,
-    "latitude": 48.8,
-    "title": "EventD",
-    "statusValue": "ready"
-  },
-  {
-    "longitude": 2.3488,
-    "latitude": 48.8534,
-    "title": "EventE",
-    "statusValue": "ready"
-  },
-  {
-    "longitude": 2.3,
-    "latitude": 48.9,
-    "title": "EventF",
-    "statusValue": "ready"
-  }, 
-]
-const jsonRender = data
-
 class MapScreen extends Component {
   constructor(props) {
     super(props);
@@ -78,7 +38,6 @@ class MapScreen extends Component {
     return { latitude, longitude, latitudeDelta, longitudeDelta };
   };
 
-
   _setLocation = () => {
     navigator.geolocation.getCurrentPosition(
       position => {
@@ -99,8 +58,6 @@ class MapScreen extends Component {
   };
 
   render() {
-    console.log("EVENTSSSSSS")
-    console.log(this.props.events)
     let markers = [];
      this.props.events.map( marker => {
       markers.push({
@@ -110,13 +67,9 @@ class MapScreen extends Component {
       "statusValue": marker.description
       })
     })
-    console.log("MARKERS")
-    console.log(markers)
     return (
       <View style={styles.overallViewContainer}>
         <GoogleMaps region={this._setRegion()} markers={markers} />
-        {/* <GoogleMaps region={this._setRegion()} markers={jsonRender} /> */}
-        {/* <GoogleMaps region={this._setRegion()} markers={this.props.navigation.state.params.marker} /> */}
         <View style={{ height: "10%" }}>
           <View
             style={{

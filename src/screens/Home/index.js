@@ -13,20 +13,6 @@ import { globalStyles, styleMainColor } from "../../utils/styles";
 import { requestLocationPermission } from "../../utils/PermissionsAndroid";
 import { connect } from "react-redux";
 
-// onPress={() =>
-//   this.props.navigation.navigate("SingleEventDetails", {
-//     id:ID,
-//     longitude:Number(long),
-//     latitude:Number(lat),
-//     marker: [{
-//       "longitude": Number(long), 
-//       "latitude": Number(lat), 
-//       "title": name, 
-//       "statusValue": description
-//     }]
-//   })
-
-
 class HomeScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -114,10 +100,6 @@ class HomeScreen extends Component {
       };
       this.props.dispatch(action);
 
-      // this.setState({
-      //   _events: json.data,
-      // })
-      // if (this.state._events == []){
       if (this.props.events == []){
         Alert.alert(
           "Aucun évènement dans vos environs",

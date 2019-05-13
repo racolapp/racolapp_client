@@ -88,6 +88,7 @@ export default class App extends Component {
       console.log(json.error);
     } else {
       this._listTypesEvents = json.data;
+      this._listTypesEvents.unshift({name: "Choisir"});
       this.setState({ fetchedData: true });
     }
   };
@@ -309,6 +310,7 @@ export default class App extends Component {
           <Text style={globalStyles.buttonText}> VALIDE </Text>
         </TouchableOpacity>
       </View>
+      {console.log(this.state)}
     </ScrollView>
   );
 

@@ -64,7 +64,7 @@ class MapScreen extends Component {
       "longitude": Number(marker.long), 
       "latitude": Number(marker.lat), 
       "title": marker.name, 
-      "statusValue": marker.description
+      "description": marker.description
       })
     })
     return (

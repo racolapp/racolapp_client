@@ -37,6 +37,13 @@ const globalStyles = StyleSheet.create({
     padding: 5,
     marginTop: 10
   },
+  h3Center: {
+    color: styleMainColor,
+    textAlign: "center",
+    fontSize: 15,
+    padding: 5,
+    marginTop: 10
+  },
   h3Flex1: {
     flex: 1
   },
@@ -63,7 +70,7 @@ const globalStyles = StyleSheet.create({
   },
   textInputLightRound: {
     borderRadius: 25,
-    padding: 10,
+    // padding: 10,
     marginTop: 5,
     borderColor: styleMainColor,
     borderWidth: 2,

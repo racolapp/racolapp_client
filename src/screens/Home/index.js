@@ -79,7 +79,7 @@ class HomeScreen extends Component {
     );
   };
 
-  // TODO
+  // TODO? ajouter token si route doit être secure
   _loadEvents = async () => {
     const response = await fetch("https://racolapp.herokuapp.com/events/", {
       headers: {
@@ -134,11 +134,12 @@ class HomeScreen extends Component {
                   id:ID,
                   longitude:Number(long),
                   latitude:Number(lat),
+                  description,
                   marker: [{
                     "longitude": Number(long), 
                     "latitude": Number(lat), 
                     "title": name, 
-                    "statusValue": description
+                    "description": description
                   }]
                 })
               }

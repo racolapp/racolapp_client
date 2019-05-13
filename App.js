@@ -5,43 +5,33 @@ import SignInScreen from "./src/screens/SignIn";
 import SignUpScreen from "./src/screens/SignUp";
 import EventsPostedScreen from "./src/screens/EventsPosted";
 import EventsSubscriptedScreen from "./src/screens/EventsSubscripted";
+import SingleEventDetailsScreen from "./src/screens/SingleEventDetails";
 import AddScreen from "./src/screens/Add";
-import { Image, } from "react-native";
+import { Image } from "react-native";
 import {
   createBottomTabNavigator,
   createStackNavigator,
   createAppContainer
 } from "react-navigation";
+import {
+  styleMainColor,
+  styleOnMainColor,
+  styleNavigationHeaderStyle,
+  sizeHomeButtonTabBar,
+  sizeNotHomeButtonTabBar
+} from "./src/utils/styles";
+import { Provider, connect } from 'react-redux';
+import store from './src/store/configureStore';
 
-// STYLE HEADER NAVIGATION
-const headerStyle = {
-  headerStyle: {
-    backgroundColor: "#F8F8F8"
-  },
-  headerTintColor: "#000000",
-  headerTitleStyle: {
-    fontWeight: "bold",
-    flex: 1,
-    textAlign: "center"
-  }
-};
-
-// STYLE BOTTOM NAVIGATION
-const sizeHomeButtonTabBar = 40;
-const sizeNotHomeButtonTabBar = 25;
-const colorIconsTabBar = "#2699FB";
-const colorIconsTabBarSelected = "#1D6098";
-
-
-// NAVIGATION
 const resultsStack = createStackNavigator(
   {
     Home: HomeScreen,
-    Map: MapScreen
+    Map: MapScreen,
+    SingleEventDetails: SingleEventDetailsScreen
   },
   {
     initialRouteName: "Home",
-    defaultNavigationOptions: headerStyle
+    defaultNavigationOptions: styleNavigationHeaderStyle
   }
 );
 
@@ -52,7 +42,7 @@ const eventsPostedSingleStack = createStackNavigator(
     }
   },
   {
-    defaultNavigationOptions: headerStyle
+    defaultNavigationOptions: styleNavigationHeaderStyle
   }
 );
 
@@ -63,7 +53,7 @@ const addSingleStack = createStackNavigator(
     }
   },
   {
-    defaultNavigationOptions: headerStyle
+    defaultNavigationOptions: styleNavigationHeaderStyle
   }
 );
 
@@ -74,7 +64,7 @@ const eventsSubscriptedSingleStack = createStackNavigator(
     }
   },
   {
-    defaultNavigationOptions: headerStyle
+    defaultNavigationOptions: styleNavigationHeaderStyle
   }
 );
 
@@ -85,35 +75,43 @@ const authenticationStack = createStackNavigator(
   },
   {
     initialRouteName: "SignIn",
-    defaultNavigationOptions: headerStyle
+    defaultNavigationOptions: styleNavigationHeaderStyle
   }
 );
 
-_handleColorIconTabBar = (focused) => {
-  return color = focused ? colorIconsTabBarSelected : colorIconsTabBar;
-}
+_handleColorIconTabBar = focused => {
+  return (color = focused ? styleOnMainColor : styleMainColor);
+};
 
-export default createAppContainer(
+const AppContainer = createAppContainer(
   createBottomTabNavigator(
     {
       EventsSubscripted: {
         screen: eventsSubscriptedSingleStack,
         navigationOptions: {
-          tabBarIcon: (focused, tintColor) => {
-            return (<Image
-              style={{ width: 25, height: 25, tintColor: _handleColorIconTabBar(focused.focused) }}
-              source={require("./assets/img/tabBar/calendar.png")}
-            />)
-          }
+          tabBarIcon: focused => (
+            <Image
+              style={{
+                width: sizeNotHomeButtonTabBar,
+                height: sizeNotHomeButtonTabBar,
+                tintColor: _handleColorIconTabBar(focused.focused)
+              }}
+              source={require("./assets/img/tabBar/joinEvent.png")}
+            />
+          )
         }
       },
       EventsPosted: {
         screen: eventsPostedSingleStack,
         navigationOptions: {
-          tabBarIcon: (focused, tintColor) => (
+          tabBarIcon: focused => (
             <Image
-              style={{ width: sizeNotHomeButtonTabBar, height: sizeNotHomeButtonTabBar, tintColor: _handleColorIconTabBar(focused.focused) }}
-              source={require("./assets/img/tabBar/invite.png")}
+              style={{
+                width: sizeNotHomeButtonTabBar,
+                height: sizeNotHomeButtonTabBar,
+                tintColor: _handleColorIconTabBar(focused.focused)
+              }}
+              source={require("./assets/img/tabBar/inviteEvent.png")}
             />
           )
         }
@@ -123,7 +121,11 @@ export default createAppContainer(
         navigationOptions: {
           tabBarIcon: (focused, tintColor) => (
             <Image
-              style={{ width: sizeHomeButtonTabBar, height: sizeHomeButtonTabBar, tintColor: _handleColorIconTabBar(focused.focused) }}
+              style={{
+                width: sizeHomeButtonTabBar,
+                height: sizeHomeButtonTabBar,
+                tintColor: _handleColorIconTabBar(focused.focused)
+              }}
               source={require("./assets/img/tabBar/search.png")}
             />
           )
@@ -132,9 +134,13 @@ export default createAppContainer(
       Add: {
         screen: addSingleStack,
         navigationOptions: {
-          tabBarIcon: (focused, tintColor) => (
+          tabBarIcon: focused => (
             <Image
-              style={{ width: sizeNotHomeButtonTabBar, height: sizeNotHomeButtonTabBar, tintColor: _handleColorIconTabBar(focused.focused) }}
+              style={{
+                width: sizeNotHomeButtonTabBar,
+                height: sizeNotHomeButtonTabBar,
+                tintColor: _handleColorIconTabBar(focused.focused)
+              }}
               source={require("./assets/img/tabBar/plus.png")}
             />
           )
@@ -143,14 +149,18 @@ export default createAppContainer(
       Authentication: {
         screen: authenticationStack,
         navigationOptions: {
-          tabBarIcon: (focused, tintColor) => (
+          tabBarIcon: focused => (
             <Image
-              style={{ width: sizeNotHomeButtonTabBar, height: sizeNotHomeButtonTabBar, tintColor: _handleColorIconTabBar(focused.focused) }}
+              style={{
+                width: sizeNotHomeButtonTabBar,
+                height: sizeNotHomeButtonTabBar,
+                tintColor: _handleColorIconTabBar(focused.focused)
+              }}
               source={require("./assets/img/tabBar/user.png")}
             />
           )
         }
-      },
+      }
     },
     {
       initialRouteName: "Home",
@@ -158,6 +168,14 @@ export default createAppContainer(
         showIcon: true,
         showLabel: false
       }
-    },
+    }
   )
 );
+
+export default () => {
+  return (
+    <Provider store = {store}>
+      <AppContainer/>
+    </Provider>
+  )
+};

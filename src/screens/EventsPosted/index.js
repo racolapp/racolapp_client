@@ -12,27 +12,25 @@ export default class EventsSubscriptedScreen extends Component {
     super(props);
 
     this.state = {
-      token: "",
-      userID: ""
+      events: [] // TODO: temporaire à remplacer par this._events = [] quand api OK (passer par state ??)
     }
-    this.events = []; // TODO: temporaire à remplacer par this._events = [] quand api OK (passer par state ??)
   }
-
-  
 
   fetchData = async () => {
     // // TODO: fetch ..................
     let user = await readStorage("user")
+    
+    console.log('========================= user ID')
+    console.log(user.data.user.ID)
+    console.log('========================= token')
+    console.log(user.meta.token)
 
-    this.setState({ token: user.meta.token, userID: user.data.user.ID})
-
-    const response = await fetch('https://racolapp.herokuapp.com/events/userID', {
+    const response = await fetch(`https://racolapp.herokuapp.com/events/userID/${user.data.user.ID}`, {
       headers: {
-        "Content-Type": "application/json",
-        "authorization": user.meta.token
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": "Bearer "+user.meta.token
       },
-      method: "GET",
-      body: JSON.stringify(this.state)
+      method: "GET"
     });
 
     const json = await response.json();
@@ -52,18 +50,18 @@ export default class EventsSubscriptedScreen extends Component {
     // I'M CONNECTED
     else {
       console.log(json)
-      return json.data;
+      this.setState({ events: json.data});
     }
   };
 
   componentWillMount = async () => {
     try {
       let userConnected = await readStorage("user");
-      console.log(userConnected)
       if (userConnected === undefined) {
         this.props.navigation.navigate('SignIn');
       } else {
         this.setState({user: userConnected.data.user})
+        this.fetchData()
       }
     } catch (error) {
       console.log('catch eventposted')
@@ -72,6 +70,6 @@ export default class EventsSubscriptedScreen extends Component {
   }
 
   render() {
-    return <EventList events={ () => { fetchData() }}/>
+    return <EventList events={this.state.events}/>
   }
 }

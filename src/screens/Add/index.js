@@ -47,17 +47,20 @@ export default class App extends Component {
 
   // TODO: POST NEW EVENT
   _addEvent = async () => {
-    const response = await fetch("https://racolapp.herokuapp.com/users", {
+    let user = await readStorage("user")
+
+    const response = await fetch("https://racolapp.herokuapp.com/events/", {
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": user.meta.token
       },
       method: "POST",
       body: JSON.stringify(this.state)
     });
     const json = await response.json();
 
-    // console.log("############# RESPONSE JSON ###############");
-    // console.log(json);
+    console.log("############# JSON ###############");
+    console.log(json);
 
     // TODO: personnaliser l'alerte?
     if (json.error) {
@@ -71,7 +74,7 @@ export default class App extends Component {
           }
         ]
       );
-    }
+    } 
   };
 
   _fetchAllTypesEvents = async () => {

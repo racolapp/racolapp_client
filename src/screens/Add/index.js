@@ -25,16 +25,18 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      userID: "",
       searchedLocation: "",
-      name: "",
-      description: "",
       location: "",
+      name: "",
       long: "",
       lat: "",
-      date: "",
       capacity: "",
+      date: "",
+      description: "",
+      duration: "",
       typeEvent: "",
-      TypeEventsID: "",
+      typeEventsID: "",
       fetchedData: false
     };
     this.resultToSearchLocation = [];
@@ -49,10 +51,16 @@ export default class App extends Component {
   _addEvent = async () => {
     let user = await readStorage("user")
 
+    console.log("============== user ID ========")
+    console.log(user.data.user.ID)
+    
+    this.setState({userID: user.data.user.ID})
+    console.log(this.state.userID)
+    
     const response = await fetch("https://racolapp.herokuapp.com/events/", {
       headers: {
         "Content-Type": "application/json",
-        "Authorization": user.meta.token
+        "Authorization": "Bearer "+user.meta.token
       },
       method: "POST",
       body: JSON.stringify(this.state)
@@ -294,7 +302,7 @@ export default class App extends Component {
               onValueChange={(value, key) => {
                 this.setState({
                   typeEvent: value,
-                  TypeEventsID: this._listTypesEvents[key].ID
+                  typeEventsID: this._listTypesEvents[key].ID
                 });
               }}
             >

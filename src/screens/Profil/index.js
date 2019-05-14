@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity, Alert } from "react-native";
 import { globalStyles } from "../../utils/styles";
 
 import { readStorage, removeStorage } from "../../utils/asyncStorage";
@@ -16,12 +16,18 @@ export default class EventList extends Component {
   _disconnect = async () => {
     Alert.alert(
       "Êtes vous sur de vouloir vous déconnecter ?",
+      "Vous ne pourrez plus voir vos évenements ou en créer",
       [
         {
-          text: "OUI",
+          text: 'ANNULER',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: "OK",
           onPress: () => {
             removeStorage("user")
-            this.location.locate('Home')
+            this.props.navigation.navigate('Home')
           }
         }
       ]

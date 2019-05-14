@@ -32,7 +32,7 @@ class GoogleMaps extends Component {
             longitude: marker.longitude,
           };
 
-          console.log("ok");
+          // console.log("ok");
 
           const metadata = `${marker.description}`;
 

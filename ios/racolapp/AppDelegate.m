@@ -12,11 +12,15 @@
 #import <React/RCTRootView.h>
 #import <GoogleMaps/GoogleMaps.h>
 
+// Config react-native-config
+#import <ReactNativeConfig/ReactNativeConfig.h>
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  [GMSServices provideAPIKey:@"AIzaSyARMc2ZcRcUV-0aiaaW-X_Syise73k3y8s"];
+  NSString *apiGoogle = [ReactNativeConfig envFor:@"GOOGLE_MAPS_API_KEY"];
+  [GMSServices provideAPIKey:apiGoogle];
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"racolapp"

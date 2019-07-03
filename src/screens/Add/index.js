@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
-  Picker
+  Picker,
+  Alert
 } from "react-native";
 import {
   setStorage,
@@ -15,7 +16,6 @@ import {
 } from "../../utils/asyncStorage";
 import { globalStyles, styleMainColor } from "../../utils/styles";
 import DatePicker from "react-native-datepicker";
-import SearchableDropdown from 'react-native-searchable-dropdown';
 
 export default class App extends Component {
   static navigationOptions = {
@@ -25,21 +25,105 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      userID: "",
       searchedLocation: "",
-      name: "Partie de billard",
-      description: "Pour retrouver des amateurs de billard et de bonnes bières",
       location: "",
+      name: "",
       long: "",
       lat: "",
-      date: "",
       capacity: "",
-      TypeEventsID: "1",
-      UserID: 1
+      date: "",
+      description: "",
+      duration: "",
+      typeEvent: "",
+      typeEventsID: "",
+      fetchedData: false
     };
     this.resultToSearchLocation = [];
+    this._listTypesEvents = [];
   }
 
-  _searchLocation = async adress => {
+  componentDidMount = async () => {
+    await this._fetchAllTypesEvents();
+  };
+
+  // TODO: POST NEW EVENT
+  _addEvent = async () => {
+    let user = await readStorage("user")
+
+    console.log("============== user ID ========")
+    console.log(user.data.user.ID)
+    
+    this.setState({userID: user.data.user.ID})
+    console.log(this.state.userID)
+    
+    const response = await fetch("https://racolapp.herokuapp.com/events/", {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer "+user.meta.token
+      },
+      method: "POST",
+      body: JSON.stringify(this.state)
+    });
+    const json = await response.json();
+
+    console.log("############# JSON ###############");
+    console.log(json);
+
+    // TODO: personnaliser l'alerte?
+    if (json.error) {
+      Alert.alert(
+        "Impossible d'ajouter m'évènement",
+        "Vérifiez les informations saisies",
+        [
+          {
+            text: "OK",
+            onPress: () => console.log("Add event error - OK pressed")
+          }
+        ]
+      );
+    } 
+  };
+
+  _fetchAllTypesEvents = async () => {
+    const response = await fetch("https://racolapp.herokuapp.com/typeevents", {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "GET"
+    });
+    const json = await response.json();
+
+    if (json.error) {
+      console.log("Fetch events types failed");
+      console.log(json.error);
+    } else {
+      this._listTypesEvents = json.data;
+      this._listTypesEvents.unshift({name: "Choisir"});
+      this.setState({ fetchedData: true });
+    }
+  };
+
+  _mapListTypesEvents = () => {
+    // TODO: Add a default item
+    try {
+      return this._listTypesEvents.map(item => {
+        return (
+          <Picker.Item
+            label={item.name}
+            key={item}
+            value={item.name}
+            color={styleMainColor}
+          />
+        );
+      });
+    } catch (err) {
+      console.log("Fetch api Type Event failed");
+      console.log(err.message);
+    }
+  };
+
+  _fetchListLocations = async adress => {
     const response = await fetch(
       `https://api-adresse.data.gouv.fr/search/?q=${adress}`,
       {
@@ -49,43 +133,25 @@ export default class App extends Component {
         method: "GET"
       }
     );
-
     const json = await response.json();
-this.resultToSearchLocation = json.features;
 
-    // const json = await response.json();
-    // this._listSearchLocation(json.features)
-  };
-
-  _listSearchLocation = (list) => {
-    this.resultToSearchLocation = []
-    try {
-      return list.map(item => {
-        // console.log("MAPPPPPPPPPPPPP")
-        // console.log(item.properties.label)
-        return this.resultToSearchLocation.push(item.properties.label)
-      });
-    } catch (err) {
-      console.log("Fetch api adress failed");
-      console.log(err.message);
-    }
-    finally{
-    console.log(this.resultToSearchLocation)
+    // HANDLE NO API RESPONSE
+    if (json.title == "Missing query" || json.features.length == 0) {
+      console.log("No API response");
+    } else {
+      this.resultToSearchLocation = json.features;
     }
   };
 
-  _listResultLocation = () => {
+  _mapListResultLocation = () => {
     try {
       return this.resultToSearchLocation.map(item => {
         return (
           <Picker.Item
             label={item.properties.label}
             key={item.properties.id}
-            value={{
-              label: item.properties.label,
-              long: item.geometry.coordinates[0],
-              lat: item.geometry.coordinates[1]
-            }}
+            value={item.properties.label}
+            color={styleMainColor}
           />
         );
       });
@@ -93,19 +159,6 @@ this.resultToSearchLocation = json.features;
       console.log("Fetch api adress failed");
       console.log(err.message);
     }
-  };
-
-  _addEvent = async () => {
-    const response = await fetch("https://racolapp.herokuapp.com/users", {
-      headers: {
-        "Content-Type": "application/json"
-      },
-      method: "POST",
-      body: JSON.stringify(this.state)
-    });
-    const json = await response.json();
-    // console.log("############# RESPONSE JSON ###############");
-    // console.log(json);
   };
 
   _renderScrollView = () => (
@@ -119,7 +172,7 @@ this.resultToSearchLocation = json.features;
             fontStyle: "italic",
             textAlign: "center"
           }}
-          placeholder="Renseigne ici ton titre!"
+          placeholder="Renseigne ICI ton titre!"
           placeholderTextColor="white"
           onChangeText={name => this.setState({ name })}
           value={this.state.name}
@@ -127,83 +180,17 @@ this.resultToSearchLocation = json.features;
       </View>
 
       <View style={{ marginTop: 10, marginLeft: 20, marginRight: 20 }}>
+        {/* EVENT DESCRIPTION */}
         <TextInput
           style={globalStyles.h2}
-          placeholder="Décris-nous ton évènement en quelques lignes"
+          placeholder="Décris-nous ICI ton évènement en quelques lignes"
           placeholderTextColor={styleMainColor}
           multiline={true}
           onChangeText={description => this.setState({ description })}
           value={this.state.description}
         />
 
-        <View style={{ flex: 1, flexDirection: "row" }}>
-          <Text style={[globalStyles.h3, globalStyles.h3Flex1]}>
-            Lieu de l'évènement
-          </Text>
-          <TextInput
-            style={[
-              globalStyles.textInputLightRectangular,
-              globalStyles.textInputLightRectangularFlex1
-            ]}
-            placeholder="A toi de nous dire"
-            placeholderTextColor={styleMainColor}
-            onChangeText={searchedLocation => {
-              this.setState({ searchedLocation });
-              this._searchLocation(this.state.searchedLocation);
-            }}
-            value={this.state.searchedLocation}
-          />
-        </View>
-        <View>
-          <Picker
-            // selectedValue={this.state.location}
-            onValueChange={value => {
-              this.setState({
-                location: value.label,
-                long: value.long,
-                lat: value.lat
-              });
-            }}
-          >
-            {this._listResultLocation()}
-          </Picker>
-          {console.log(this.state)}
-        </View>
-
-        {/* <View>
-        <SearchableDropdown
-        // onTextChange={text => alert(text)}
-        onTextChange={searchedLocation => {
-          this.setState({ searchedLocation });
-          this._searchLocation(this.state.searchedLocation);
-          // this._listSearchLocation()
-        }}
-        // onItemSelect={item => alert(JSON.stringify(item))}
-        containerStyle={{ padding: 5 }}
-        textInputStyle={{
-          padding: 12,
-          borderWidth: 1,
-          borderColor: '#ccc',
-          borderRadius: 5,
-        }}
-        itemStyle={{
-          padding: 10,
-          marginTop: 2,
-          backgroundColor: '#ddd',
-          borderColor: '#bbb',
-          borderWidth: 1,
-          borderRadius: 5,
-        }}
-        itemTextStyle={{ color: '#222' }}
-        itemsContainerStyle={{ maxHeight: 140 }}
-        items={this.resultToSearchLocation}
-        defaultIndex={2}
-        placeholder="placeholder"
-        resetValue={false}
-        underlineColorAndroid="transparent"
-      />
-        </View> */}
-
+        {/* EVENT DATE */}
         <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
           <Text style={[globalStyles.h3, globalStyles.h3Flex1]}>
             Date de l'évènement
@@ -214,7 +201,7 @@ this.resultToSearchLocation = json.features;
             mode="datetime"
             placeholder="Sélectionne le jour et l'heure"
             format=""
-            minDate={Date.now()}
+            // minDate={Date.now()} // not compatible?
             confirmBtnText="OK"
             cancelBtnText="Annuler"
             is24Hour={true}
@@ -234,19 +221,57 @@ this.resultToSearchLocation = json.features;
               this.setState({ date: date });
             }}
           />
-
-          {/* <TextInput
-            style={[
-              globalStyles.textInputLightRectangular,
-              globalStyles.textInputLightRectangularFlex1
-            ]}
-            placeholder="A toi de nous dire"
-            placeholderTextColor={styleMainColor}
-            onChangeText={date => this.setState({ date })}
-            value={this.state.date}
-          /> */}
         </View>
 
+        <View style={{ borderWidth: 1, borderColor: styleMainColor }} />
+
+        {/* EVENT PLACE */}
+        <View>
+          <Text style={[globalStyles.h2]}>Lieu de l'évènement</Text>
+          <View style={{ flex: 1, flexDirection: "row" }}>
+            <Text style={[globalStyles.h3, globalStyles.h3Flex1]}>
+              Renseignes ici les 1ères lettres
+            </Text>
+            <TextInput
+              style={[
+                globalStyles.textInputLightRectangular,
+                globalStyles.textInputLightRectangularFlex1
+              ]}
+              placeholder="A toi de nous dire"
+              placeholderTextColor={styleMainColor}
+              onChangeText={searchedLocation => {
+                this.setState({ searchedLocation });
+                this._fetchListLocations(this.state.searchedLocation);
+              }}
+              value={this.state.searchedLocation}
+            />
+          </View>
+          <View style={{ flex: 1, flexDirection: "row" }}>
+            <Text style={[globalStyles.h3, globalStyles.h3Flex1]}>
+              Puis choisis le bon lieu
+            </Text>
+            <View style={{ flex: 1 }}>
+              <Picker
+                selectedValue={this.state.location}
+                onValueChange={(value, key) => {
+                  this.setState({
+                    location: value,
+                    long: this.resultToSearchLocation[key].geometry
+                      .coordinates[0],
+                    lat: this.resultToSearchLocation[key].geometry
+                      .coordinates[1]
+                  });
+                }}
+              >
+                {this._mapListResultLocation()}
+              </Picker>
+            </View>
+          </View>
+        </View>
+
+        <View style={{ borderWidth: 1, borderColor: styleMainColor }} />
+
+        {/* CAPACITY FOR THE EVENT */}
         <View style={{ flex: 1, flexDirection: "row" }}>
           <Text style={[globalStyles.h3, globalStyles.h3Flex1]}>
             Nombre de personnes
@@ -264,26 +289,29 @@ this.resultToSearchLocation = json.features;
             }
             value={this.state.capacity}
           />
-          {/* {console.log(this.state)} */}
-          {/* {console.log(this.resultToSearchLocation)} */}
         </View>
 
+        {/* EVENT TYPE */}
         <View style={{ flex: 1, flexDirection: "row" }}>
           <Text style={[globalStyles.h3, globalStyles.h3Flex1]}>
-            Type d'évènement
+            Choisis le type de l'évènement
           </Text>
-          <TextInput
-            style={[
-              globalStyles.textInputLightRectangular,
-              globalStyles.textInputLightRectangularFlex1
-            ]}
-            placeholder="A toi de nous dire"
-            placeholderTextColor={styleMainColor}
-            onChangeText={TypeEventsID => this.setState({ TypeEventsID })}
-            value={this.state.TypeEventsID}
-          />
+          <View style={{ flex: 1 }}>
+            <Picker
+              selectedValue={this.state.typeEvent}
+              onValueChange={(value, key) => {
+                this.setState({
+                  typeEvent: value,
+                  typeEventsID: this._listTypesEvents[key].ID
+                });
+              }}
+            >
+              {this._mapListTypesEvents()}
+            </Picker>
+          </View>
         </View>
 
+        {/* BUTTON TO SUBMIT NEW EVENT */}
         <TouchableOpacity
           style={localStyles.button}
           onPress={() => {
@@ -293,11 +321,12 @@ this.resultToSearchLocation = json.features;
           <Text style={globalStyles.buttonText}> VALIDE </Text>
         </TouchableOpacity>
       </View>
+      {console.log(this.state)}
     </ScrollView>
   );
 
   render() {
-    return <>{this._renderScrollView()}</>;
+    return <>{this.state.fetchedData == true && this._renderScrollView()}</>;
   }
 }
 

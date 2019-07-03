@@ -15,7 +15,9 @@ const readStorage = async (key) => {
       const res = JSON.parse(value);
       console.log("READ SUCCESSFULLY");
       console.log(res);
-      console.log(res.pseudo);
+      // console.log(res.pseudo); // marche pas je crois
+      console.log(res.data.user.pseudo)
+      return res
     }
   } catch (e) {
     console.log(e.message);

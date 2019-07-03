@@ -5,8 +5,10 @@ import {
 } from "react-native";
 import PropTypes from "prop-types";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import { withNavigation } from 'react-navigation';
 
-export default class GoogleMaps extends Component {
+
+class GoogleMaps extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,9 +32,9 @@ export default class GoogleMaps extends Component {
             longitude: marker.longitude,
           };
 
-          console.log("ok");
+          // console.log("ok");
 
-          const metadata = `${marker.statusValue}`;
+          const metadata = `${marker.description}`;
 
           return (
             <MapView.Marker
@@ -40,8 +42,16 @@ export default class GoogleMaps extends Component {
               coordinate={coords}
               title={marker.title}
               description={metadata}
-              onPress={() => { console.log('coucou') }}
-              onCalloutPress={() => { this.props.navigation.navigate('Home') }}
+              onCalloutPress={() =>
+                this.props.navigation.navigate("SingleEventDetails", {
+                  longitude: coords.longitude,
+                  latitude: coords.latitude,
+                  description: metadata,
+                  date: marker.date,
+                  marker : [marker]
+                })
+              }
+
             />
           );
         })}
@@ -50,6 +60,8 @@ export default class GoogleMaps extends Component {
     );
   }
 }
+
+export default withNavigation(GoogleMaps);
 
 const styles = StyleSheet.create({
   mapView: {
@@ -67,48 +79,3 @@ GoogleMaps.propTypes = {
     longitudeDelta: PropTypes.number.isRequired,
   })
 }
-
-
-/////////////////// COPY /////////////////
-// import React, { Component } from "react";
-// import {
-//   StyleSheet,
-//   View,
-// } from "react-native";
-// import PropTypes from "prop-types";
-// import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-
-// export default class GoogleMaps extends Component {
-//   constructor(props) {
-//     super(props);
-//   }
-
-//   render() {
-//     return (
-//         <MapView
-//           style={styles.mapView}
-//           provider={PROVIDER_GOOGLE}
-//           region={this.props.region}
-//           showsMyLocationButton={false}
-//           showsUserLocation={true}
-//         />
-//     );
-//   }
-// }
-
-// const styles = StyleSheet.create({
-//   mapView: {
-//     position: "absolute",
-//     height: "100%",
-//     width: "100%"
-//   },
-// });
-
-// GoogleMaps.propTypes = {
-//   region: PropTypes.shape({
-//       latitude: PropTypes.number.isRequired,
-//       longitude: PropTypes.number.isRequired,
-//       latitudeDelta: PropTypes.number.isRequired,
-//       longitudeDelta: PropTypes.number.isRequired,
-//     })
-// }
